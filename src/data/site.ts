@@ -25,7 +25,7 @@ export const site = {
     /** The office is not a café and is never listed as one. */
     note: 'Business office — not a café.',
   },
-  giftCardUrl: 'https://www.clover.com/',
+  giftCardUrl: 'https://www.clover.com/online-ordering/jitter-bean-office-eureka',
 } as const;
 
 /** Verbatim from the client. Do not paraphrase. */
