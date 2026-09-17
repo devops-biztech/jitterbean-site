@@ -1,0 +1,50 @@
+---
+/**
+ * The net-weight / lot mark a printed tin carries in its corners. A stamp, not
+ * a kicker: it sits on a panel edge as a struck mark, never above a heading.
+ */
+interface Props {
+  /** Rotation in degrees; a struck stamp is never quite square to the plate. */
+  tilt?: number;
+  tone?: 'ink' | 'orange' | 'label';
+  class?: string;
+}
+
+const { tilt = -3, tone = 'label', class: className } = Astro.props;
+---
+
+<span class:list={['stamp', `stamp--${tone}`, className]} style={`--tilt:${tilt}deg`} aria-hidden="true">
+  <slot />
+</span>
+
+<style>
+  .stamp {
+    display: inline-block;
+    padding: 0.32em 0.7em;
+    font-family: var(--font-text);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    white-space: nowrap;
+    border: var(--keyline) solid currentColor;
+    border-radius: var(--radius-mark);
+    rotate: var(--tilt);
+    /* Struck ink never sits at full density. */
+    opacity: 0.82;
+  }
+
+  .stamp--label {
+    color: var(--label-dim);
+  }
+
+  .stamp--orange {
+    color: var(--spot-orange-ink);
+    opacity: 0.95;
+  }
+
+  .stamp--ink {
+    color: var(--on-label-dim);
+  }
+</style>

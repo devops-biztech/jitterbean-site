@@ -1,0 +1,114 @@
+/*
+  The Coffee Tin — mid-century keywind coffee tin lithography.
+  Two spot inks over a charcoal tin body, with ivory label bands.
+  Orange is rationed: it marks live state and the mascot, never decoration.
+*/
+
+:root {
+  color-scheme: dark;
+
+  /* --- Tin body ------------------------------------------------------- */
+  --tin-field: #2a2725;
+  --tin-panel: #383838;
+  --tin-panel-lit: #433f3c;
+  --ink: #1c1a18;
+
+  /* --- Label stock ---------------------------------------------------- */
+  --label: #f4e9d8;
+  --label-warm: #ece0cb;
+  --label-dim: #d6c9b2;
+
+  /* --- Spot inks ------------------------------------------------------ */
+  --spot-orange: #f07838;
+  --spot-orange-lit: #ff9457;
+  /* Orange at text weight on --tin-panel. The base orange is 4.16:1 there,
+     under the AA floor for anything that is not large text. */
+  --spot-orange-ink: #ff9457;
+  --spot-red: #9b2a18;
+  /* Form paper and the one success tone. Both were inline literals. */
+  --paper: #fffdf8;
+  --ok: #1d6b3f;
+
+  /* --- Text on the tin body ------------------------------------------- */
+  --text: #f4e9d8;
+  /* Secondary text is tinted from the label stock, never grey. */
+  --text-dim: #b3a894;
+  --text-faint: #afa89d;
+
+  /* --- Text on label stock -------------------------------------------- */
+  --on-label: #1c1a18;
+  --on-label-dim: #5c5346;
+  --on-label-faint: #6b6255;
+
+  /* --- Roast ramp: coffee colour used as a data scale ------------------ */
+  --roast-1: #c8a06a;
+  --roast-2: #a8763f;
+  --roast-3: #7b4f28;
+  --roast-4: #4a2c18;
+
+  /* --- Rules and keylines --------------------------------------------- */
+  --keyline: 2px;
+  --keyline-hair: 1px;
+  --radius-tin: 14px;
+  /* Panels, fields and struck marks each have one corner, not an ad-hoc value. */
+  --radius-panel: 8px;
+  --radius-field: 6px;
+  --radius-mark: 3px;
+  --radius-band: 2px;
+  /* The tin's own control corner. The full-round pill is the category default. */
+  --radius-control: 5px;
+
+  /* --- Type ------------------------------------------------------------ */
+  --font-display: 'Bevan', 'Clarendon', Georgia, serif;
+  --font-text: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --step--1: clamp(0.8rem, 0.76rem + 0.2vw, 0.9rem);
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+  --step-2: clamp(1.45rem, 1.25rem + 1vw, 2rem);
+  --step-3: clamp(1.9rem, 1.5rem + 2vw, 3rem);
+  --step-4: clamp(2.4rem, 1.6rem + 4vw, 4.5rem);
+  --step-5: clamp(3rem, 1.6rem + 6.5vw, 6rem);
+
+  /* --- Space ----------------------------------------------------------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+  --sp-10: 8rem;
+
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --measure: 68ch;
+  --page-max: 1360px;
+
+  /* --- Depth: offset and blur, never a flat halo ----------------------- */
+  --lift-1: 0 2px 4px rgba(12, 10, 9, 0.4);
+  --lift-2: 0 6px 18px rgba(12, 10, 9, 0.45);
+  --lift-3: 0 14px 40px rgba(12, 10, 9, 0.5);
+
+  /* --- Motion: printed matter moves in one beat ------------------------ */
+  --beat: 260ms;
+  --beat-slow: 460ms;
+  --press: cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+/* The halftone dot screen, a real artifact of spot-colour lithography. */
+.halftone {
+  position: relative;
+  isolation: isolate;
+}
+
+.halftone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--halftone-ink, rgba(244, 233, 216, 0.09)) 1px, transparent 1.2px);
+  background-size: 6px 6px;
+}

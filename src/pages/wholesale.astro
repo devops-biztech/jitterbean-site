@@ -1,0 +1,421 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import cups from '../assets/img/cups.jpg';
+
+// No-JS submissions come back here with an outcome in the query string.
+const sent = Astro.url.searchParams.get('sent') === '1';
+const errorParam = Astro.url.searchParams.get('error');
+---
+
+<Base
+  title="Wholesale — Jitter Bean Coffee Co."
+  description="Locally roasted coffee for Humboldt County cafés, restaurants, offices and grocers. Available in 5 lb and 12 oz. Send us an inquiry."
+>
+  <header class="page masthead-block">
+    <h1>Wholesale.</h1>
+    <p class="prose">
+      We roast for cafés, restaurants, offices and grocers across Humboldt
+      County. Available in 5&nbsp;lb and 12&nbsp;oz. Tell us what you need and a
+      person will get back to you.
+    </p>
+  </header>
+
+  <div class="page section wholesale">
+    <div class="wholesale__form">
+      {
+        sent && (
+          <p class="notice notice--ok" role="status">
+            Thanks — we got it. We'll be in touch shortly.
+          </p>
+        )
+      }
+      {
+        errorParam && (
+          <p class="notice notice--bad" role="alert">
+            {errorParam}
+          </p>
+        )
+      }
+
+      <form id="wholesale-form" method="POST" action="/api/wholesale" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" type="text" autocomplete="given-name" required maxlength="80" />
+            <p class="err" data-err="firstName" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" type="text" autocomplete="family-name" required maxlength="80" />
+            <p class="err" data-err="lastName" hidden></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" />
+          <p class="err" data-err="email" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="interest">What are you interested in?</label>
+          <p class="hint" id="interest-hint">5&nbsp;lb or 12&nbsp;oz options available.</p>
+          <input
+            id="interest"
+            name="interest"
+            type="text"
+            required
+            maxlength="300"
+            aria-describedby="interest-hint"
+          />
+          <p class="err" data-err="interest" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="located">Where are you located?</label>
+          <input id="located" name="located" type="text" required maxlength="200" />
+          <p class="err" data-err="located" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="message">Anything else</label>
+          <textarea id="message" name="message" rows="5" maxlength="4000"></textarea>
+          <p class="err" data-err="message" hidden></p>
+        </div>
+
+        <!-- Bots fill this; people never see it. -->
+        <div class="trap" aria-hidden="true">
+          <label for="company">Company</label>
+          <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="submit">Send inquiry</button>
+
+        <p class="form-status" data-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <aside class="wholesale__aside">
+      <Image
+        class="wholesale__photo"
+        src={cups}
+        alt="Three Jitter Bean to-go cups beside a latte in a white cup"
+        widths={[420, 840]}
+        sizes="(max-width: 900px) 92vw, 420px"
+        loading="lazy"
+      />
+
+      <div class="aside__text">
+        <h2>Rather just talk?</h2>
+        <p>
+          Call the office during business hours and ask for wholesale, or send a
+          note straight to the inbox.
+        </p>
+        <ul class="aside__list">
+          <li><a href={`tel:${site.phoneHref}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById('wholesale-form') as HTMLFormElement | null;
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const button = form.querySelector<HTMLButtonElement>('.submit');
+
+    const clearErrors = () => {
+      form.querySelectorAll<HTMLElement>('[data-err]').forEach((el) => {
+        el.hidden = true;
+        el.textContent = '';
+        const field = form.elements.namedItem(el.dataset.err ?? '');
+        if (field instanceof HTMLElement) field.removeAttribute('aria-invalid');
+      });
+    };
+
+    const showErrors = (errors: Record<string, string>) => {
+      let first: HTMLElement | null = null;
+      for (const [key, msg] of Object.entries(errors)) {
+        const el = form.querySelector<HTMLElement>(`[data-err="${key}"]`);
+        const field = form.elements.namedItem(key);
+        if (el) {
+          el.textContent = msg;
+          el.hidden = false;
+        }
+        if (field instanceof HTMLElement) {
+          field.setAttribute('aria-invalid', 'true');
+          if (!first) first = field;
+        }
+      }
+      first?.focus();
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+
+      if (!status || !button) return;
+      button.disabled = true;
+      const label = button.textContent;
+      button.textContent = 'Sending…';
+      status.textContent = '';
+      status.dataset.tone = '';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const body = await res.json();
+
+        if (body.ok) {
+          form.reset();
+          status.textContent = body.message;
+          status.dataset.tone = 'ok';
+        } else {
+          if (body.errors) showErrors(body.errors);
+          status.textContent = body.message;
+          status.dataset.tone = 'bad';
+        }
+      } catch {
+        status.textContent =
+          'That did not send — check your connection, or email administrator@jitterbeancoffee.com directly.';
+        status.dataset.tone = 'bad';
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  }
+</script>
+
+<style>
+  .masthead-block {
+    padding-top: var(--sp-8);
+  }
+
+  .masthead-block h1 {
+    font-size: var(--step-5);
+  }
+
+  .masthead-block .prose {
+    margin-top: var(--sp-5);
+  }
+
+  .section {
+    margin-top: var(--sp-8);
+  }
+
+  .wholesale {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: var(--sp-7);
+    align-items: start;
+  }
+
+  .wholesale__form {
+    background: var(--label);
+    color: var(--on-label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: clamp(var(--sp-5), 4vw, var(--sp-7));
+    box-shadow: var(--lift-2);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+
+  .field {
+    margin-bottom: var(--sp-5);
+  }
+
+  label {
+    display: block;
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+    margin-bottom: var(--sp-2);
+  }
+
+  .hint {
+    font-size: var(--step--1);
+    color: var(--on-label-dim);
+    margin-bottom: var(--sp-2);
+    font-style: italic;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: var(--sp-3);
+    background: var(--paper);
+    color: var(--on-label);
+    border: var(--keyline) solid rgba(28, 26, 24, 0.35);
+    border-radius: var(--radius-field);
+    transition: border-color var(--beat) var(--press), box-shadow var(--beat) var(--press);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(28, 26, 24, 0.5);
+  }
+
+  input:hover,
+  textarea:hover {
+    border-color: rgba(28, 26, 24, 0.6);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--spot-orange);
+    box-shadow: 0 0 0 3px rgba(240, 120, 56, 0.35);
+  }
+
+  input[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
+    border-color: var(--spot-red);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .err {
+    margin-top: var(--sp-2);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--spot-red);
+  }
+
+  .trap {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .submit {
+    padding: var(--sp-3) var(--sp-6);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--spot-orange);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-control);
+    cursor: pointer;
+    transition: background-color var(--beat) var(--press), transform var(--beat) var(--press);
+  }
+
+  .submit:hover:not(:disabled) {
+    background: var(--spot-orange-lit);
+  }
+
+  .submit:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .submit:disabled {
+    background: var(--label-dim);
+    color: var(--on-label-dim);
+    cursor: progress;
+  }
+
+  .form-status {
+    margin-top: var(--sp-4);
+    font-weight: 600;
+    min-height: 1.5em;
+  }
+
+  .form-status[data-tone='ok'] {
+    color: var(--ok);
+  }
+
+  .form-status[data-tone='bad'] {
+    color: var(--spot-red);
+  }
+
+  .notice {
+    padding: var(--sp-3) var(--sp-4);
+    margin-bottom: var(--sp-5);
+    border-radius: var(--radius-panel);
+    font-weight: 600;
+  }
+
+  .notice--ok {
+    background: color-mix(in oklab, var(--ok) 16%, transparent);
+    color: var(--ok);
+  }
+
+  .notice--bad {
+    background: rgba(155, 42, 24, 0.12);
+    color: var(--spot-red);
+  }
+
+  /* --- Aside ------------------------------------------------------------- */
+  .wholesale__aside {
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    overflow: clip;
+  }
+
+  .wholesale__photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .aside__text {
+    padding: var(--sp-5);
+  }
+
+  .aside__text h2 {
+    font-size: var(--step-2);
+  }
+
+  .aside__text p {
+    margin-top: var(--sp-4);
+    color: var(--text-dim);
+  }
+
+  .aside__list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-4);
+    display: grid;
+    gap: var(--sp-2);
+  }
+
+  .aside__list a {
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .wholesale {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

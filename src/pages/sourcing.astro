@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { sourcing, roasts, site } from '../data/site';
+---
+
+<Base
+  title="Sourcing — Jitter Bean Coffee Co."
+  description="Where Jitter Bean coffee comes from, and the four roasts we pull it into: House, Sumatra, Espresso and French."
+>
+  <header class="page masthead-block">
+    <h1>From bean to cup.</h1>
+  </header>
+
+  <section class="page section origins">
+    <p class="origins__body">{sourcing}</p>
+  </section>
+
+  <section class="page section" aria-labelledby="roasts-head">
+    <h2 id="roasts-head" class="section-head">Four roasts.</h2>
+
+    <ol class="roasts">
+      {
+        roasts.map((r, i) => (
+          <li class="roast" style={`--depth:${r.depth}`}>
+            <Image
+              class="roast__bag"
+              src={r.bag}
+              alt={`${r.name} blend, 12 ounce bag`}
+              widths={[260, 520]}
+              sizes="(max-width: 760px) 44vw, 240px"
+              loading={i < 2 ? 'eager' : 'lazy'}
+            />
+            <div class="roast__label">
+              <h3 class="roast__name">{r.name}</h3>
+              <p class="roast__level">{r.level}</p>
+              <span class="roast__swatch" aria-hidden="true" />
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="note">
+      Bags are 12&nbsp;oz, sold in person at any café. Wholesale is available in
+      5&nbsp;lb and 12&nbsp;oz — <a href="/wholesale">send an inquiry</a> or call
+      <a href={`tel:${site.phoneHref}`}>{site.phone}</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .masthead-block {
+    padding-top: var(--sp-8);
+  }
+
+  .masthead-block h1 {
+    font-size: var(--step-5);
+    max-width: 14ch;
+  }
+
+  .section {
+    margin-top: var(--sp-8);
+  }
+
+  .origins {
+    max-width: 60ch;
+  }
+
+  .origins__body {
+    font-size: var(--step-2);
+    line-height: 1.55;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  .section-head {
+    font-size: var(--step-3);
+    color: var(--text);
+    margin-bottom: var(--sp-6);
+  }
+
+  .roasts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-5);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .roast {
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  .roast__bag {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-field);
+    box-shadow: var(--lift-2);
+  }
+
+  .roast__name {
+    font-size: var(--step-2);
+    line-height: 1;
+  }
+
+  .roast__level {
+    margin-top: var(--sp-1);
+    font-size: var(--step--1);
+    color: var(--text-dim);
+  }
+
+  .roast__swatch {
+    display: block;
+    height: 6px;
+    margin-top: var(--sp-3);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--roast-4) calc(var(--depth) * 100%), var(--roast-1));
+  }
+
+  .note {
+    margin-top: var(--sp-7);
+    color: var(--text-dim);
+    max-width: var(--measure);
+  }
+
+  @media (max-width: 760px) {
+    .roasts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

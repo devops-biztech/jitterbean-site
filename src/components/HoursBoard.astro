@@ -1,0 +1,579 @@
+---
+import { locations, hoursRows, shortTime, DAY_ABBR, type Location } from '../data/locations';
+import { site } from '../data/site';
+import Starburst from './Starburst.astro';
+
+interface Props {
+  /** Heading level so the board can sit under different page structures. */
+  headingId?: string;
+}
+const { headingId = 'hours-board' } = Astro.props;
+
+const dayOrder = [1, 2, 3, 4, 5, 6, 0]; // Monday-first, the way a café board reads
+
+function cell(loc: Location, day: number): string {
+  if (!loc.hours) return '—';
+  const h = loc.hours[day];
+  return h ? `${shortTime(h.open)}–${shortTime(h.close)}` : 'Closed';
+}
+
+const payload = locations.map((l) => ({ slug: l.slug, hours: l.hours }));
+---
+
+<section class="board" aria-labelledby={headingId}>
+  <div class="board__head">
+    <h2 id={headingId}>Open right now</h2>
+    <p class="board__note">
+      All six locations, all week. Times are Humboldt&nbsp;County local.
+    </p>
+  </div>
+
+  <!-- Dense view: every café against every day, the way a printed board carries it. -->
+  <div class="board__sheet" data-wide>
+    <table class="grid" data-hours>
+      <caption class="visually-hidden">
+        Opening hours for all six Jitter Bean Coffee Co. locations, Monday through Sunday.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" class="grid__corner">Café</th>
+          {
+            dayOrder.map((d) => (
+              <th scope="col" data-day={d} class="grid__day">
+                {DAY_ABBR[d]}
+              </th>
+            ))
+          }
+          <th scope="col" class="grid__status">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          locations.map((loc) => (
+            <tr data-cafe={loc.slug}>
+              <th scope="row" class="grid__name">
+                <a href={`/locations#${loc.slug}`}>
+                  <span class="grid__cafe">{loc.name}</span>
+                  <span class="grid__city">{loc.city}</span>
+                </a>
+              </th>
+              {dayOrder.map((d) => (
+                <td data-day={d} class:list={['grid__cell', { 'is-dash': !loc.hours }]}>
+                  {cell(loc, d)}
+                </td>
+              ))}
+              <td class="grid__flag">
+                <span class="flash" data-flash hidden>
+                  <Starburst class="flash__burst" stretch />
+                  <span class="flash__text" data-flash-text />
+                </span>
+                <span class="flash__fallback" data-fallback>
+                  {loc.hours ? 'See hours' : 'Not yet listed'}
+                </span>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Narrow view: today first, the whole week one tap away. -->
+  <ul class="stack" data-narrow>
+    {
+      locations.map((loc) => (
+        <li class="stack__item" data-cafe={loc.slug}>
+          <div class="stack__top">
+            <a href={`/locations#${loc.slug}`} class="stack__name">
+              <span class="grid__cafe">{loc.name}</span>
+              <span class="grid__city">{loc.city}</span>
+            </a>
+            <span class="flash" data-flash hidden>
+              <Starburst class="flash__burst" stretch />
+              <span class="flash__text" data-flash-text />
+            </span>
+            <span class="flash__fallback" data-fallback>
+              {loc.hours ? 'See hours' : 'Not yet listed'}
+            </span>
+          </div>
+
+          {
+            loc.hours ? (
+              <details class="stack__details">
+                <summary>
+                  <span class="stack__marker" aria-hidden="true">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+                      <path d="M2 7h10" />
+                      <path class="stack__marker-v" d="M7 2v10" />
+                    </svg>
+                  </span>
+                  <span data-today-label>This week</span>
+                </summary>
+                <dl class="stack__week">
+                  {hoursRows(loc.hours).map((r) => (
+                    <div class="stack__row">
+                      <dt>{r.label}</dt>
+                      <dd data-hours>{r.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </details>
+            ) : (
+              <p class="stack__pending">
+                Address and hours for this café are being confirmed.
+              </p>
+            )
+          }
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script define:vars={{ payload, timeZone: site.timeZone }}>
+  // Status is computed on the café's clock, not the visitor's, and the flash is
+  // stamped on rather than faded in — one beat, the way spot ink lands.
+  const CLOSING_SOON = 60;
+
+  const toMinutes = (t) => {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  // The flash is read as a sentence, and by screen readers, so it uses the
+  // full form. Only the dense grid cells are compact.
+  const longTime = (t) => {
+    const [h, m] = t.split(':').map(Number);
+    const suffix = h < 12 ? 'am' : 'pm';
+    const hour = h % 12 === 0 ? 12 : h % 12;
+    return m === 0 ? `${hour}${suffix}` : `${hour}:${String(m).padStart(2, '0')}${suffix}`;
+  };
+
+  function cafeNow() {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).formatToParts(new Date());
+    const get = (t) => parts.find((p) => p.type === t)?.value ?? '';
+    const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    return { day: days[get('weekday')] ?? 0, minutes: (Number(get('hour')) % 24) * 60 + Number(get('minute')) };
+  }
+
+  function statusFor(hours, now) {
+    if (!hours) return { state: 'unpublished', label: 'Not yet listed' };
+    const today = hours[now.day];
+    if (today) {
+      const open = toMinutes(today.open);
+      const close = toMinutes(today.close);
+      if (now.minutes >= open && now.minutes < close) {
+        const left = close - now.minutes;
+        if (left <= CLOSING_SOON) {
+          return { state: 'closing', label: left <= 1 ? 'Closing now' : `Closing in ${left} min` };
+        }
+        return { state: 'open', label: `Open till ${longTime(today.close)}` };
+      }
+      if (now.minutes < open) return { state: 'closed', label: `Opens ${longTime(today.open)}` };
+    }
+    for (let i = 1; i <= 7; i++) {
+      const next = hours[(now.day + i) % 7];
+      if (next) {
+        return {
+          state: 'closed',
+          label: i === 1 ? `Opens ${longTime(next.open)} tomorrow` : `Opens ${longTime(next.open)}`,
+        };
+      }
+    }
+    return { state: 'closed', label: 'Closed' };
+  }
+
+  function paint() {
+    const now = cafeNow();
+
+    document.querySelectorAll('[data-day]').forEach((el) => {
+      el.classList.toggle('is-today', Number(el.dataset.day) === now.day);
+    });
+
+    let openCount = 0;
+
+    for (const { slug, hours } of payload) {
+      const status = statusFor(hours, now);
+      if (status.state === 'open' || status.state === 'closing') openCount++;
+
+      document.querySelectorAll(`[data-cafe="${slug}"]`).forEach((row) => {
+        const flash = row.querySelector('[data-flash]');
+        const text = row.querySelector('[data-flash-text]');
+        const fallback = row.querySelector('[data-fallback]');
+        const today = row.querySelector('[data-today-label]');
+
+        if (today) {
+          today.textContent = hours ? 'This week' : 'Hours pending';
+        }
+
+        if (!flash || !text) return;
+
+        if (status.state === 'unpublished') {
+          flash.hidden = true;
+          if (fallback) fallback.hidden = false;
+          return;
+        }
+
+        if (fallback) fallback.hidden = true;
+        text.textContent = status.label;
+        row.dataset.state = status.state;
+
+        if (flash.hidden) {
+          flash.hidden = false;
+          // The stamp: one beat, and only the first time it lands.
+          flash.classList.add('is-stamping');
+          flash.addEventListener('animationend', () => flash.classList.remove('is-stamping'), {
+            once: true,
+          });
+        }
+      });
+    }
+
+    document.querySelectorAll('[data-open-count]').forEach((el) => {
+      el.textContent = String(openCount);
+    });
+
+    // Four cafés have no published hours yet, so a bare "2" would read as
+    // four closed doors. Name the denominator until every café is listed.
+    const listed = payload.filter((p) => p.hours).length;
+    document.querySelectorAll('[data-open-verb]').forEach((el) => {
+      el.textContent = openCount === 1 ? 'location open now' : 'locations open now';
+    });
+    document.querySelectorAll('[data-open-qual]').forEach((el) => {
+      // Only name the denominator while some cafés are still unlisted.
+      el.textContent = listed === payload.length ? '' : `of ${listed} listed`;
+    });
+  }
+
+  paint();
+  setInterval(paint, 30_000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) paint();
+  });
+</script>
+
+<style>
+  .board {
+    --halftone-ink: rgba(28, 26, 24, 0.07);
+  }
+
+  .board__head {
+    margin-bottom: var(--sp-4);
+  }
+
+  .board__head h2 {
+    font-size: var(--step-2);
+  }
+
+  .board__note {
+    margin-top: var(--sp-2);
+    color: var(--text-dim);
+    max-width: 46ch;
+  }
+
+  /* --- The dense sheet --------------------------------------------------- */
+  .board__sheet {
+    background: var(--label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    overflow: clip;
+    box-shadow: var(--lift-2);
+  }
+
+  .grid {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--on-label);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .grid th,
+  .grid td {
+    text-align: left;
+    padding: var(--sp-3) var(--sp-3);
+    border-bottom: var(--keyline-hair) solid rgba(28, 26, 24, 0.18);
+  }
+
+  .grid thead th {
+    font-family: var(--font-text);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+    background: var(--label-warm);
+    border-bottom: var(--keyline) solid var(--ink);
+    white-space: nowrap;
+  }
+
+  .grid tbody tr:last-child th,
+  .grid tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .grid__corner {
+    min-width: 12ch;
+  }
+
+  .grid__name {
+    font-weight: 400;
+  }
+
+  .grid__name a {
+    display: grid;
+    gap: 2px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .grid__name a:hover .grid__cafe {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+  }
+
+  .grid__cafe {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .grid__city {
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+  }
+
+  .grid__cell {
+    font-size: var(--step--1);
+    white-space: nowrap;
+    color: var(--on-label);
+  }
+
+  .grid__cell.is-dash {
+    color: var(--on-label-faint);
+  }
+
+  /* Today reads as a printed column rule down the sheet. */
+  .grid td.is-today,
+  .grid th.is-today {
+    background: rgba(240, 120, 56, 0.14);
+    box-shadow: inset 2px 0 0 var(--spot-orange), inset -2px 0 0 var(--spot-orange);
+    font-weight: 700;
+  }
+
+  .grid__flag,
+  .grid__status {
+    min-width: 17ch;
+  }
+
+  /* --- The flash --------------------------------------------------------- */
+  /* `display` on the class would otherwise defeat the hidden attribute. */
+  .flash[hidden] {
+    display: none;
+  }
+
+  .flash {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 15ch;
+    padding: var(--sp-3) var(--sp-5);
+    isolation: isolate;
+  }
+
+  /* The flash prints as an oval burst behind its own words, not beside them. */
+  /* An absolutely positioned SVG with auto width falls back to its intrinsic
+     size and ignores inset, so the box is given explicitly. */
+  .flash :global(svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: drop-shadow(0 2px 3px rgba(28, 26, 24, 0.35));
+  }
+
+  .flash__text {
+    font-size: var(--step--1);
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  [data-state='closed'] .flash :global(svg) {
+    opacity: 0;
+  }
+
+  [data-state='closed'] .flash__text {
+    color: var(--on-label-dim);
+    font-weight: 600;
+  }
+
+  [data-state='closing'] .flash :global(svg) {
+    display: none;
+  }
+
+  /* The contract names a band here, not a burst. */
+  [data-state='closing'] .flash {
+    background: var(--spot-red);
+    border-radius: var(--radius-band);
+    box-shadow: var(--lift-1);
+  }
+
+  [data-state='closing'] .flash__text {
+    color: var(--label);
+  }
+
+  .flash__fallback {
+    font-size: var(--step--1);
+    color: var(--on-label-faint);
+  }
+
+  @keyframes stamp {
+    from {
+      transform: scale(1.5) rotate(-7deg);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .flash.is-stamping {
+    animation: stamp var(--beat) var(--press);
+  }
+
+  /* --- The narrow stack --------------------------------------------------- */
+  .stack {
+    display: none;
+    list-style: none;
+    padding: 0;
+    gap: var(--sp-3);
+  }
+
+  .stack__item {
+    background: var(--label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: var(--sp-4);
+    color: var(--on-label);
+    box-shadow: var(--lift-1);
+  }
+
+  .stack__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+
+  .stack__name {
+    display: grid;
+    gap: 2px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .stack__details {
+    margin-top: var(--sp-4);
+    border-top: var(--keyline-hair) solid rgba(28, 26, 24, 0.2);
+    padding-top: var(--sp-3);
+  }
+
+  .stack__details summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+    list-style: none;
+  }
+
+  .stack__details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* A struck keylined marker, drawn rather than typed, so the stroke weight
+     is ours and does not shift with the font. */
+  .stack__marker {
+    display: grid;
+    place-items: center;
+    width: 1.55em;
+    height: 1.55em;
+    flex: none;
+    border: var(--keyline) solid currentColor;
+    border-radius: var(--radius-mark);
+  }
+
+  .stack__marker svg {
+    width: 64%;
+    height: 64%;
+    overflow: visible;
+  }
+
+  .stack__marker-v {
+    transform-origin: center;
+    transition: transform var(--beat) var(--press);
+  }
+
+  .stack__details[open] .stack__marker-v {
+    transform: scaleY(0);
+  }
+
+  .stack__week {
+    margin-top: var(--sp-3);
+    display: grid;
+    gap: var(--sp-2);
+  }
+
+  .stack__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    font-size: var(--step--1);
+  }
+
+  .stack__row dt {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+  }
+
+  .stack__pending {
+    margin-top: var(--sp-3);
+    font-size: var(--step--1);
+    color: rgba(28, 26, 24, 0.5);
+  }
+
+  /* The dense sheet needs ~1040px of its own. Below that it was being clipped
+     by `overflow: clip` — the Status column, and with it the OPEN flash,
+     vanished off the right edge between 900px and 1050px. */
+  @media (max-width: 1120px) {
+    .board__sheet {
+      display: none;
+    }
+    .stack {
+      display: grid;
+    }
+  }
+</style>

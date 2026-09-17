@@ -1,0 +1,206 @@
+---
+import Base from '../layouts/Base.astro';
+import HoursBoard from '../components/HoursBoard.astro';
+import { Image } from 'astro:assets';
+import { locations, hoursRows } from '../data/locations';
+
+const mapsUrl = (q: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+---
+
+<Base
+  title="Locations — Jitter Bean Coffee Co."
+  description="Six Jitter Bean locations across Humboldt County, in Arcata, Eureka and Fortuna. Addresses, hours, and which ones are open right now."
+>
+  <header class="page masthead-block">
+    <h1>Six locations.</h1>
+    <p class="prose">
+      Arcata, Eureka and Fortuna. Find the one on your route, check it's open,
+      and go.
+    </p>
+  </header>
+
+  <div class="page section">
+    <HoursBoard headingId="all-hours" />
+  </div>
+
+  <section class="page section" aria-labelledby="each-head">
+    <h2 id="each-head" class="section-head">Each café</h2>
+
+    <div class="cafes">
+      {
+        locations.map((loc) => (
+          <article class="cafe" id={loc.slug}>
+            {loc.photo && (
+              <Image
+                class="cafe__photo"
+                src={loc.photo}
+                alt={`The Jitter Bean ${loc.name} café`}
+                widths={[420, 840]}
+                sizes="(max-width: 900px) 92vw, 420px"
+                loading="lazy"
+              />
+            )}
+
+            <div class="cafe__body">
+              <h3 class="cafe__name">{loc.name}</h3>
+              <p class="cafe__city">{loc.city}, California</p>
+              {loc.locating && <p class="cafe__locating">{loc.locating}</p>}
+
+              {
+                loc.address ? (
+                  <a
+                    class="cafe__addr"
+                    href={mapsUrl(`${loc.address} ${loc.city} CA ${loc.zip ?? ''}`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {/* One expression: adjacent JSX expressions emit a stray space. */}
+                    {`${loc.address}${loc.zip ? `, ${loc.city}, CA ${loc.zip}` : ''}`}
+                  </a>
+                ) : (
+                  <p class="cafe__pending">Address being confirmed</p>
+                )
+              }
+
+              {
+                loc.hours ? (
+                  <dl class="cafe__hours">
+                    {hoursRows(loc.hours).map((r) => (
+                      <div class="cafe__row">
+                        <dt>{r.label}</dt>
+                        <dd data-hours>{r.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : (
+                  <p class="cafe__pending cafe__pending--block">
+                    Hours for this café are being confirmed with the shop. Call
+                    the office and we'll tell you exactly when it's open.
+                  </p>
+                )
+              }
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .masthead-block {
+    padding-top: var(--sp-8);
+  }
+
+  .masthead-block h1 {
+    font-size: var(--step-5);
+  }
+
+  .masthead-block .prose {
+    margin-top: var(--sp-5);
+  }
+
+  .section {
+    margin-top: var(--sp-8);
+  }
+
+  .section-head {
+    font-size: var(--step-3);
+    margin-bottom: var(--sp-6);
+  }
+
+  .cafes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--sp-6);
+  }
+
+  .cafe {
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    overflow: clip;
+    scroll-margin-top: var(--sp-6);
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .cafe__photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 20 / 9;
+    object-fit: cover;
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .cafe__body {
+    padding: var(--sp-5);
+  }
+
+  .cafe__name {
+    font-size: var(--step-2);
+    line-height: 1;
+  }
+
+  .cafe__city {
+    margin-top: var(--sp-2);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .cafe__locating {
+    margin-top: var(--sp-2);
+    font-size: var(--step--1);
+    color: var(--text-dim);
+  }
+
+  .cafe__addr {
+    display: inline-block;
+    margin-top: var(--sp-4);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .cafe__pending {
+    margin-top: var(--sp-4);
+    font-size: var(--step--1);
+    color: var(--text-faint);
+    font-style: italic;
+  }
+
+  .cafe__pending--block {
+    padding: var(--sp-3) var(--sp-4);
+    border: var(--keyline-hair) dashed var(--text-faint);
+    border-radius: var(--radius-panel);
+    font-style: normal;
+  }
+
+  .cafe__hours {
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-4);
+    border-top: var(--keyline-hair) solid rgba(244, 233, 216, 0.18);
+    display: grid;
+    gap: var(--sp-2);
+  }
+
+  .cafe__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    font-size: var(--step--1);
+  }
+
+  .cafe__row dt {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .cafe__row dd {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

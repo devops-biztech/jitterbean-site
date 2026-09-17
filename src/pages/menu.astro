@@ -1,0 +1,264 @@
+---
+import Base from '../layouts/Base.astro';
+import { boards, itemCount } from '../data/menu';
+import Stamp from '../components/Stamp.astro';
+---
+
+<Base
+  title="Menu — Jitter Bean Coffee Co."
+  description={`All ${itemCount} Jitter Bean drinks, hot and cold: espresso, blended Explosions, milkshakes, smoothies, cold brew and a kids' menu.`}
+>
+  <header class="page menu-head">
+    <div class="menu-head__text">
+      <h1>The menu.</h1>
+      <p class="prose">
+        Every drink we pour, hot and cold. Sizes are listed where they vary —
+        ask at any window if you want something built differently.
+      </p>
+    </div>
+
+    <div class="menu-head__aside">
+      <p class="menu-head__count">
+        <span class="menu-head__n">{itemCount}</span>
+        <span class="menu-head__unit">drinks</span>
+      </p>
+      <nav class="board-nav" aria-label="Menu sections">
+        {boards.map((b) => <a href={`#${b.id}`}>{b.name}</a>)}
+      </nav>
+      <Stamp tone="label" tilt={-3}>Posted at every window</Stamp>
+    </div>
+  </header>
+
+  {
+    boards.map((board) => (
+      <section class="page section" id={board.id} aria-labelledby={`${board.id}-head`}>
+        <h2 id={`${board.id}-head`} class="board-title">
+          {board.name}
+        </h2>
+
+        <div class="sheet">
+          {board.sections.map((section) => (
+            <section class="run" aria-labelledby={`${board.id}-${section.id}`}>
+              <div class="run__head">
+                <h3 id={`${board.id}-${section.id}`}>{section.name}</h3>
+                {section.sizes && <p class="run__sizes">{section.sizes}</p>}
+              </div>
+
+              {section.note && <p class="run__note">{section.note}</p>}
+
+              <ul class="items">
+                {section.items.map((item) => (
+                  <li class="item">
+                    <span class="item__name">{item.name}</span>
+                    {item.size && <span class="item__size">{item.size}</span>}
+                    {item.note && <span class="item__note">{item.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="page section availability">
+    <p>
+      Availability varies a little by café and by season. Prices are posted at
+      every window.
+    </p>
+  </section>
+</Base>
+
+<style>
+  /* The opening viewport carries the whole index, not just a title. */
+  .menu-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--sp-6) var(--sp-8);
+    align-items: end;
+    padding-top: var(--sp-7);
+  }
+
+  .menu-head h1 {
+    font-size: var(--step-5);
+  }
+
+  .menu-head .prose {
+    margin-top: var(--sp-4);
+  }
+
+  .menu-head__aside {
+    display: grid;
+    justify-items: start;
+    gap: var(--sp-4);
+  }
+
+  .menu-head__count {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+
+  .menu-head__n {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .menu-head__unit {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .board-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+
+  .board-nav a {
+    padding: var(--sp-2) var(--sp-5);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: var(--keyline) solid var(--text-faint);
+    border-radius: var(--radius-control);
+    transition: background-color var(--beat) var(--press), color var(--beat) var(--press),
+      border-color var(--beat) var(--press);
+  }
+
+  .board-nav a:hover {
+    background: var(--label);
+    border-color: var(--label);
+    color: var(--ink);
+  }
+
+  .section {
+    margin-top: var(--sp-6);
+    scroll-margin-top: var(--sp-6);
+  }
+
+  .board-title {
+    font-size: var(--step-3);
+    color: var(--text);
+    margin-bottom: var(--sp-4);
+  }
+
+  .sheet {
+    background: var(--label);
+    color: var(--on-label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: clamp(var(--sp-5), 4vw, var(--sp-7));
+    box-shadow: var(--lift-2);
+    /* An explicit grid, not CSS columns: column balancing left a long void
+       under the shorter run and the pairing is better decided than guessed. */
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    gap: var(--sp-7) var(--sp-8);
+  }
+
+  .run {
+    min-width: 0;
+  }
+
+  .run__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding-bottom: var(--sp-2);
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .run__head h3 {
+    font-family: var(--font-text);
+    font-size: var(--step-0);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .run__sizes {
+    flex: none;
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--on-label-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .run__note {
+    margin-top: var(--sp-2);
+    font-size: var(--step--1);
+    font-style: italic;
+    color: var(--on-label-dim);
+  }
+
+  .items {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-4);
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-2) var(--sp-3);
+  }
+
+  .item__name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .item__size {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    background: rgba(240, 120, 56, 0.22);
+    padding: 2px var(--sp-2);
+    border-radius: var(--radius-mark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .item__note {
+    flex-basis: 100%;
+    font-size: var(--step--1);
+    font-style: italic;
+    color: var(--on-label-dim);
+  }
+
+  .availability {
+    color: var(--text-dim);
+    max-width: var(--measure);
+  }
+
+  @media (max-width: 900px) {
+    .menu-head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .sheet {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,730 @@
+---
+import Base from '../layouts/Base.astro';
+import HoursBoard from '../components/HoursBoard.astro';
+import Starburst from '../components/Starburst.astro';
+import Stamp from '../components/Stamp.astro';
+import { Image } from 'astro:assets';
+import { site, mission, roasts } from '../data/site';
+import { itemCount, boards } from '../data/menu';
+
+// The four names no competitor can copy. Pulled from the menu data so they
+// cannot drift out of sync with the menu page.
+const SIGNATURES = ["Jumpin' Jitter Java", 'Jet Explosion', 'Blustery Bean', 'Little Bean Shake'];
+const signatures = SIGNATURES.map((name) => {
+  for (const board of boards) {
+    for (const section of board.sections) {
+      const hit = section.items.find((i) => i.name === name);
+      if (hit) return { ...hit, board: board.name };
+    }
+  }
+  return null;
+}).filter((x): x is NonNullable<typeof x> => x !== null);
+import mascot from '../assets/img/mascot.png';
+import crew from '../assets/img/crew.jpg';
+import mugProgram from '../assets/img/mug-program.png';
+---
+
+<Base
+  title="Jitter Bean Coffee Co. — six locations in Humboldt County"
+  description="Locally owned, locally roasted coffee with six locations across Humboldt County. See which one is open right now, and what's on the menu."
+>
+  <!-- The tin: the lockup, the descriptor, and the live count, on one band. -->
+  <section class="tin halftone" aria-labelledby="wordmark">
+    <div class="page tin__inner">
+      <Image
+        class="tin__mascot"
+        src={mascot}
+        alt=""
+        widths={[240, 420, 640]}
+        sizes="(max-width: 700px) 150px, 230px"
+        loading="eager"
+        fetchpriority="high"
+      />
+
+      <div class="tin__band">
+        <h1 id="wordmark" class="tin__lockup">
+          Jitter&nbsp;Bean<span class="tin__co"> Coffee Co.<sup>&reg;</sup></span>
+        </h1>
+      </div>
+
+      <div class="tin__foot">
+        <p class="descriptor tin__descriptor">{site.tagline}</p>
+
+        <a class="count" href="#hours-board">
+          <span class="count__badge">
+            <Starburst class="count__burst" points={26} inset={0.86} />
+            <span class="count__n" data-open-count>&mdash;</span>
+          </span>
+          <span class="count__label">
+            <span class="count__verb" data-open-verb>open now</span>
+            <span class="count__qual" data-open-qual></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="page section section--board">
+    <HoursBoard />
+  </div>
+
+  <!-- The quiet passage. One idea, all the air it needs. -->
+  <section class="section creed halftone" aria-labelledby="creed-head">
+    <div class="page creed__inner">
+      <h2 id="creed-head" class="creed__head">You matter here.</h2>
+      <p class="creed__body">{mission}</p>
+    </div>
+  </section>
+
+  <!-- The roast ramp: coffee colour doing real work as a scale. -->
+  <section class="page section" aria-labelledby="roast-head">
+    <div class="split">
+      <div class="split__lead">
+        <h2 id="roast-head">Roasted here, not shipped here.</h2>
+        <p class="prose">
+          Four roasts, ground or whole bean, from a medium House through a
+          French dark. Bags are sold at every café — call the office or stop in,
+          and somebody will put one in your hand.
+        </p>
+        <a class="btn" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+      </div>
+
+      <ol class="roasts">
+        {
+          roasts.map((r, i) => (
+            <li class="roast" style={`--depth:${r.depth}`}>
+              <Image
+                class="roast__bag"
+                src={r.bag}
+                alt={`${r.name} blend, 12 ounce bag`}
+                widths={[220, 440]}
+                sizes="(max-width: 760px) 40vw, 200px"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+              <div class="roast__label">
+                <h3 class="roast__name">{r.name}</h3>
+                <p class="roast__level">{r.level}</p>
+                <span class="roast__swatch" aria-hidden="true" />
+                <Stamp class="roast__stamp" tone="label" tilt={i % 2 === 0 ? -3 : 2}>
+                  Net wt. 12 oz
+                </Stamp>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Menu: the thing that used to be a 2MB picture. -->
+  <section class="page section menu-call halftone" aria-labelledby="menu-head">
+    <div class="menu-call__inner">
+      <h2 id="menu-head">
+        Everything we pour,<br />in actual words.
+      </h2>
+      <p class="prose">
+        {itemCount} drinks, hot and cold, from a Double Espresso to a Jet
+        Explosion made with Red Bull — plus a kids' menu. Readable on a phone,
+        no pinching.
+      </p>
+      <a class="btn btn--loud" href="/menu">See the menu</a>
+    </div>
+
+    <div class="signatures">
+      <p class="signatures__head">Only here</p>
+      <ul class="signatures__list">
+        {
+          signatures.map((item) => (
+            <li class="signature">
+              <span class="signature__name">{item.name}</span>
+              <span class="signature__where">{item.board}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <Stamp class="signatures__stamp" tone="ink" tilt={-3}>Hot &amp; Cold</Stamp>
+    </div>
+  </section>
+
+  <!-- Two real programs, side by side, deliberately unlike each other. -->
+  <section class="page section" aria-labelledby="programs-head">
+    <h2 id="programs-head" class="visually-hidden">Programs</h2>
+
+    <div class="programs">
+      <article class="program program--mug">
+        <Image
+          class="program__art"
+          src={mugProgram}
+          alt="Buy a Jitter Bean mug and your first drink is on us. Receive fifty cents off every day when you use a clean, reusable travel mug."
+          widths={[320, 640]}
+          sizes="(max-width: 860px) 90vw, 340px"
+          loading="lazy"
+        />
+        <div class="program__text">
+          <h3>Bring your own mug.</h3>
+          <p>
+            Buy a JB mug at any café and the first drink is on us. After that
+            it's 50&cent; off, every single day, any time you bring it back
+            clean.
+          </p>
+        </div>
+      </article>
+
+      <article class="program program--crew">
+        <Image
+          class="program__photo"
+          src={crew}
+          alt="Three Jitter Bean baristas leaning out of a drive-thru window"
+          widths={[420, 840, 1200]}
+          sizes="(max-width: 860px) 90vw, 520px"
+          loading="lazy"
+        />
+        <div class="program__text">
+          <h3>We're always hiring.</h3>
+          <p>
+            Six locations means real shifts and real paths — barista, shift lead,
+            management, support. Everyone starts at our standard entry rate,
+            with increases for performance and longevity, and benefits for
+            eligible employees.
+          </p>
+          <p class="program__how">
+            Drop a resume in person at any location.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="page section" aria-labelledby="wholesale-head">
+    <div class="wholesale-band">
+      <div class="wholesale-band__text">
+        <h2 id="wholesale-head">Pour our coffee at your place.</h2>
+        <p>
+          Cafés, restaurants, offices and grocers across Humboldt. Tell us what
+          you need and we'll get back to you.
+        </p>
+      </div>
+      <div class="wholesale-band__action">
+        <Stamp tone="ink" tilt={2}>5&nbsp;lb &middot; 12&nbsp;oz</Stamp>
+        <a class="btn btn--loud" href="/wholesale">Wholesale inquiry</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- The tin ------------------------------------------------------------ */
+  .tin {
+    --halftone-ink: rgba(244, 233, 216, 0.08);
+    background: var(--tin-field);
+    padding-block: clamp(var(--sp-6), 6vw, var(--sp-8)) var(--sp-6);
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .tin__inner {
+    position: relative;
+  }
+
+  .tin__mascot {
+    position: absolute;
+    top: clamp(-120px, -9vw, -70px);
+    right: clamp(-8px, 1vw, 40px);
+    width: clamp(150px, 19vw, 230px);
+    height: auto;
+    z-index: 2;
+    filter: drop-shadow(0 10px 22px rgba(12, 10, 9, 0.55));
+    pointer-events: none;
+  }
+
+  .tin__band {
+    position: relative;
+    isolation: isolate;
+    background: var(--label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: clamp(var(--sp-4), 2.2vw, var(--sp-5)) clamp(var(--sp-5), 4vw, var(--sp-7));
+    box-shadow: var(--lift-3);
+  }
+
+  /* The second ink lands a hair off the plate, the way spot colour does. */
+  .tin__band::after {
+    content: '';
+    position: absolute;
+    inset: -3px -2px 1px -4px;
+    border: var(--keyline-hair) solid var(--spot-orange);
+    border-radius: var(--radius-tin);
+    opacity: 0.4;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* The inner keyline a printed label carries inside its edge. */
+  .tin__band::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: var(--keyline-hair) solid rgba(28, 26, 24, 0.45);
+    border-radius: calc(var(--radius-tin) - 6px);
+    pointer-events: none;
+  }
+
+  .tin__lockup {
+    color: var(--on-label);
+    font-size: clamp(2.4rem, 8.6vw, 6rem);
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .tin__co {
+    display: block;
+    font-size: 0.38em;
+    letter-spacing: 0.02em;
+    color: var(--on-label-dim);
+    margin-top: 0.22em;
+  }
+
+  .tin__co sup {
+    font-size: 0.45em;
+    vertical-align: super;
+  }
+
+  .tin__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    margin-top: var(--sp-4);
+  }
+
+  .tin__descriptor {
+    color: var(--text-dim);
+    max-width: 60ch;
+  }
+
+  .count {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  /* The number is struck on the flash, not set beside it. */
+  .count__badge {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: clamp(70px, 7vw, 86px);
+    aspect-ratio: 1;
+  }
+
+  /* Scoped styles do not cross into a child component's own markup,
+     so the burst is reached as a global descendant of an element we own. */
+  .count__badge :global(svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 3px 6px rgba(12, 10, 9, 0.45));
+  }
+
+  .count__n {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 2.7rem);
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .count__label {
+    display: grid;
+    gap: 2px;
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.25;
+    max-width: 20ch;
+  }
+
+  /* The live verb leads; the denominator is the quiet second line. */
+  .count__qual {
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  .count__qual:empty {
+    display: none;
+  }
+
+  .count:hover .count__label {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* --- Sections ------------------------------------------------------------ */
+  .section {
+    margin-top: var(--sp-9);
+  }
+
+  .section--board {
+    margin-top: var(--sp-6);
+  }
+
+  /* --- The quiet passage ---------------------------------------------------- */
+  /* Full-bleed so the screen is a printed field, not a floating swatch. */
+  .creed {
+    padding-block: var(--sp-8);
+    text-align: center;
+  }
+
+  .creed__inner {
+    max-width: 62ch;
+  }
+
+  .creed__head {
+    font-size: var(--step-4);
+    color: var(--text);
+  }
+
+  .creed__body {
+    margin-top: var(--sp-6);
+    font-size: var(--step-1);
+    line-height: 1.75;
+    color: var(--text-dim);
+    text-wrap: pretty;
+  }
+
+  /* --- Roasts --------------------------------------------------------------- */
+  .split {
+    display: grid;
+    gap: var(--sp-7);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+  }
+
+  .split__lead .prose {
+    margin-top: var(--sp-5);
+  }
+
+  .roasts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-4);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: roast;
+  }
+
+  .roast {
+    display: grid;
+    gap: var(--sp-3);
+  }
+
+  .roast__bag {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-field);
+    box-shadow: var(--lift-2);
+  }
+
+  .roast__label {
+    display: grid;
+    gap: var(--sp-1);
+  }
+
+  .roast__name {
+    font-size: var(--step-1);
+    line-height: 1;
+  }
+
+  .roast__level {
+    font-size: var(--step--1);
+    color: var(--text-dim);
+  }
+
+  /* The ramp: each swatch mixes toward the dark end by its own depth. */
+  .roast__swatch {
+    display: block;
+    height: 6px;
+    margin-top: var(--sp-2);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--roast-4) calc(var(--depth) * 100%), var(--roast-1));
+  }
+
+  /* --- Calls ---------------------------------------------------------------- */
+  .btn {
+    display: inline-block;
+    margin-top: var(--sp-5);
+    padding: var(--sp-3) var(--sp-5);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    border: var(--keyline) solid var(--text-faint);
+    border-radius: var(--radius-control);
+    transition:
+      border-color var(--beat) var(--press),
+      color var(--beat) var(--press),
+      background-color var(--beat) var(--press);
+  }
+
+  .btn:hover {
+    border-color: var(--label);
+    color: var(--ink);
+    background: var(--label);
+  }
+
+  .btn--loud {
+    background: var(--spot-orange);
+    border-color: var(--spot-orange);
+    color: var(--ink);
+  }
+
+  .btn--loud:hover {
+    background: var(--spot-orange-lit);
+    border-color: var(--spot-orange-lit);
+    color: var(--ink);
+  }
+
+  .menu-call {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: clamp(var(--sp-6), 5vw, var(--sp-8));
+    align-items: center;
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: clamp(var(--sp-6), 5vw, var(--sp-8));
+  }
+
+  .menu-call__inner {
+    max-width: 46ch;
+  }
+
+  /* The names a competitor cannot copy, set on label stock. */
+  .signatures {
+    position: relative;
+    background: var(--label);
+    color: var(--on-label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-panel);
+    padding: var(--sp-5) var(--sp-5) var(--sp-6);
+    box-shadow: var(--lift-2);
+  }
+
+  .signatures__head {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+    padding-bottom: var(--sp-2);
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .signatures__list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-4);
+    display: grid;
+    gap: var(--sp-4);
+  }
+
+  .signature {
+    display: grid;
+    gap: 2px;
+  }
+
+  .signature__name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .signature__where {
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-label-dim);
+  }
+
+  .signatures > :global(.stamp) {
+    position: absolute;
+    right: var(--sp-5);
+    bottom: calc(var(--sp-5) * -0.5);
+    background: var(--label);
+  }
+
+  .menu-call h2 {
+    font-size: var(--step-4);
+  }
+
+  .menu-call .prose {
+    margin-top: var(--sp-5);
+  }
+
+  /* --- Programs -------------------------------------------------------------- */
+  .programs {
+    display: grid;
+    gap: var(--sp-6);
+    /* Weighted so the portrait poster and the landscape photograph resolve to
+       near-equal card heights on their own; stretch absorbs the remainder. */
+    grid-template-columns: minmax(0, 0.67fr) minmax(0, 1.33fr);
+    align-items: stretch;
+  }
+
+  .program {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    overflow: clip;
+  }
+
+  .program__art,
+  .program__photo {
+    width: 100%;
+    height: auto;
+  }
+
+  /* The poster fills its box edge to edge. 4:5 is the closest ratio to the
+     poster's own 0.772 that still fills: it crops 3.4% vertically, 24px per
+     edge, and the artwork has 57px of clear margin top and bottom, so nothing
+     printed is lost. A square box would have cropped 162px and eaten the
+     headline — which is why this is 4:5 and not 1:1. */
+  .program__art {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--tin-field);
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .program__photo {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .program__text {
+    padding: var(--sp-5);
+  }
+
+  .program__text h3 {
+    font-size: var(--step-2);
+  }
+
+  .program__text p {
+    margin-top: var(--sp-4);
+    color: var(--text-dim);
+  }
+
+  .program__how {
+    color: var(--spot-orange-ink);
+    font-weight: 600;
+  }
+
+  .roast__label > :global(.stamp) {
+    justify-self: start;
+    margin-top: var(--sp-3);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+  }
+
+  /* --- Wholesale: a banded label lockup ------------------------------------- */
+  .wholesale-band {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5) var(--sp-7);
+    background: var(--label);
+    color: var(--on-label);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    padding: clamp(var(--sp-5), 4vw, var(--sp-7));
+    box-shadow: var(--lift-2);
+  }
+
+  .wholesale-band::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: var(--keyline-hair) solid rgba(28, 26, 24, 0.35);
+    border-radius: calc(var(--radius-tin) - 6px);
+    pointer-events: none;
+  }
+
+  .wholesale-band__text {
+    max-width: 34ch;
+  }
+
+  .wholesale-band__text h2 {
+    font-size: var(--step-3);
+  }
+
+  .wholesale-band__text p {
+    margin-top: var(--sp-4);
+    color: var(--on-label-dim);
+  }
+
+  .wholesale-band__action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-3);
+  }
+
+  .wholesale-band__action .btn {
+    margin-top: 0;
+    border-color: var(--ink);
+  }
+
+  /* --- Adaptation ------------------------------------------------------------ */
+  @media (max-width: 900px) {
+    .split,
+    .programs,
+    .menu-call {
+      grid-template-columns: 1fr;
+    }
+
+    /* One column: nothing to align against, so the poster runs uncropped. */
+    .program__art {
+      aspect-ratio: auto;
+      object-fit: cover;
+    }
+    .roasts {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-5);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .tin {
+      padding-block: clamp(var(--sp-7), 19vw, var(--sp-9)) var(--sp-6);
+    }
+    .tin__mascot {
+      top: clamp(-124px, -27vw, -96px);
+      right: 0;
+      width: clamp(88px, 23vw, 120px);
+    }
+    .tin__foot {
+      align-items: flex-start;
+    }
+    .count {
+      gap: var(--sp-3);
+    }
+  }
+</style>

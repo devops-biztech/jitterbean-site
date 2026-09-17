@@ -1,0 +1,674 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-16T00:00:00.000Z",
+  "title": "Design System: Jitter Bean Coffee Co.",
+  "extensions": {
+    "colorMeta": {
+      "tin-field": {
+        "role": "neutral",
+        "displayName": "Charcoal Tin Field",
+        "canonical": "#2a2725",
+        "tonalRamp": [
+          "#100f0e",
+          "#1c1a18",
+          "#2a2725",
+          "#3d3833",
+          "#5c554d",
+          "#8a8177",
+          "#b8b0a5",
+          "#e6e0d6"
+        ]
+      },
+      "tin-panel": {
+        "role": "neutral",
+        "displayName": "Tin Panel",
+        "canonical": "#383838",
+        "tonalRamp": [
+          "#141414",
+          "#232323",
+          "#383838",
+          "#4d4d4d",
+          "#6e6e6e",
+          "#979797",
+          "#c2c2c2",
+          "#eaeaea"
+        ]
+      },
+      "tin-panel-lit": {
+        "role": "neutral",
+        "displayName": "Lit Tin Edge",
+        "canonical": "#433f3c",
+        "tonalRamp": [
+          "#171615",
+          "#2a2725",
+          "#433f3c",
+          "#5a554f",
+          "#7b746c",
+          "#a29a90",
+          "#c9c1b7",
+          "#ece7de"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink Black",
+        "canonical": "#1c1a18",
+        "tonalRamp": [
+          "#0b0a09",
+          "#141312",
+          "#1c1a18",
+          "#312d29",
+          "#4f4841",
+          "#7d7469",
+          "#ada396",
+          "#ded7cb"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Ivory Label Stock",
+        "canonical": "#f4e9d8",
+        "tonalRamp": [
+          "#33291a",
+          "#4d4029",
+          "#6b5b3f",
+          "#8e7c5c",
+          "#b4a382",
+          "#d2c4a9",
+          "#f4e9d8",
+          "#fbf6ec"
+        ]
+      },
+      "label-warm": {
+        "role": "neutral",
+        "displayName": "Warm Label Stock",
+        "canonical": "#ece0cb",
+        "tonalRamp": [
+          "#2f261a",
+          "#493c28",
+          "#66553d",
+          "#8a7659",
+          "#af9c7e",
+          "#cdbca2",
+          "#ece0cb",
+          "#f7f1e5"
+        ]
+      },
+      "label-dim": {
+        "role": "neutral",
+        "displayName": "Aged Label Stock",
+        "canonical": "#d6c9b2",
+        "tonalRamp": [
+          "#2a2318",
+          "#423825",
+          "#5d5038",
+          "#7f6f52",
+          "#a29176",
+          "#bcac93",
+          "#d6c9b2",
+          "#ede5d7"
+        ]
+      },
+      "spot-orange": {
+        "role": "primary",
+        "displayName": "Brand Orange",
+        "canonical": "#f07838",
+        "tonalRamp": [
+          "#3a1608",
+          "#5c2410",
+          "#84371a",
+          "#ad4d24",
+          "#d1602c",
+          "#f07838",
+          "#ff9457",
+          "#ffc8a3"
+        ]
+      },
+      "spot-orange-lit": {
+        "role": "primary",
+        "displayName": "Lit Brand Orange",
+        "canonical": "#ff9457",
+        "tonalRamp": [
+          "#421a0a",
+          "#682c13",
+          "#8f4020",
+          "#b8552b",
+          "#dd6c38",
+          "#f78349",
+          "#ff9457",
+          "#ffd0b4"
+        ]
+      },
+      "spot-orange-ink": {
+        "role": "primary",
+        "displayName": "Brand Orange Ink",
+        "canonical": "#ff9457",
+        "tonalRamp": [
+          "#421a0a",
+          "#682c13",
+          "#8f4020",
+          "#b8552b",
+          "#dd6c38",
+          "#f78349",
+          "#ff9457",
+          "#ffd0b4"
+        ]
+      },
+      "spot-red": {
+        "role": "secondary",
+        "displayName": "Litho Red",
+        "canonical": "#9b2a18",
+        "tonalRamp": [
+          "#2c0b05",
+          "#47130a",
+          "#651c10",
+          "#832415",
+          "#9b2a18",
+          "#c04028",
+          "#dd6b53",
+          "#f2b9ab"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Form Paper",
+        "canonical": "#fffdf8",
+        "tonalRamp": [
+          "#36301f",
+          "#4f4732",
+          "#6d6349",
+          "#8f8365",
+          "#b3a785",
+          "#d5caa9",
+          "#f0e9d5",
+          "#fffdf8"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Success Green",
+        "canonical": "#1d6b3f",
+        "tonalRamp": [
+          "#06180d",
+          "#0b2a17",
+          "#113f23",
+          "#17552f",
+          "#1d6b3f",
+          "#2f9159",
+          "#5cba83",
+          "#a8ddbe"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Label Ivory Text",
+        "canonical": "#f4e9d8",
+        "tonalRamp": [
+          "#33291a",
+          "#4d4029",
+          "#6b5b3f",
+          "#8e7c5c",
+          "#b4a382",
+          "#d2c4a9",
+          "#f4e9d8",
+          "#fbf6ec"
+        ]
+      },
+      "text-dim": {
+        "role": "neutral",
+        "displayName": "Tinted Secondary (on tin)",
+        "canonical": "#b3a894",
+        "tonalRamp": [
+          "#241f17",
+          "#3a3325",
+          "#544a36",
+          "#71654b",
+          "#8f8264",
+          "#a19479",
+          "#b3a894",
+          "#d9d2c5"
+        ]
+      },
+      "text-faint": {
+        "role": "neutral",
+        "displayName": "Tinted Tertiary (on tin)",
+        "canonical": "#afa89d",
+        "tonalRamp": [
+          "#221f1b",
+          "#37332d",
+          "#4f4a41",
+          "#6b6459",
+          "#888073",
+          "#9c9489",
+          "#afa89d",
+          "#d7d3cc"
+        ]
+      },
+      "on-label": {
+        "role": "neutral",
+        "displayName": "Ink on Label",
+        "canonical": "#1c1a18",
+        "tonalRamp": [
+          "#0b0a09",
+          "#141312",
+          "#1c1a18",
+          "#312d29",
+          "#4f4841",
+          "#7d7469",
+          "#ada396",
+          "#ded7cb"
+        ]
+      },
+      "on-label-dim": {
+        "role": "neutral",
+        "displayName": "Ink Secondary (on label)",
+        "canonical": "#5c5346",
+        "tonalRamp": [
+          "#171410",
+          "#26221b",
+          "#3b352b",
+          "#5c5346",
+          "#7c7262",
+          "#9d9382",
+          "#c0b7a7",
+          "#e4ddd1"
+        ]
+      },
+      "on-label-faint": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary (on label)",
+        "canonical": "#6b6255",
+        "tonalRamp": [
+          "#1a1713",
+          "#2b2720",
+          "#413b31",
+          "#565043",
+          "#6b6255",
+          "#8f8577",
+          "#b6ac9d",
+          "#ded6c9"
+        ]
+      },
+      "roast-1": {
+        "role": "tertiary",
+        "displayName": "Roast 1 — Medium House",
+        "canonical": "#c8a06a",
+        "tonalRamp": [
+          "#2d2010",
+          "#47341b",
+          "#644a28",
+          "#846437",
+          "#a58047",
+          "#c8a06a",
+          "#dcbd93",
+          "#f0dcc4"
+        ]
+      },
+      "roast-2": {
+        "role": "tertiary",
+        "displayName": "Roast 2",
+        "canonical": "#a8763f",
+        "tonalRamp": [
+          "#26190b",
+          "#3c2814",
+          "#55391c",
+          "#704b26",
+          "#8c5f31",
+          "#a8763f",
+          "#c89b6c",
+          "#e5cbaa"
+        ]
+      },
+      "roast-3": {
+        "role": "tertiary",
+        "displayName": "Roast 3",
+        "canonical": "#7b4f28",
+        "tonalRamp": [
+          "#1d1108",
+          "#2e1c0e",
+          "#412815",
+          "#57351b",
+          "#6c4221",
+          "#7b4f28",
+          "#a67446",
+          "#d3ab81"
+        ]
+      },
+      "roast-4": {
+        "role": "tertiary",
+        "displayName": "Roast 4 — French Dark",
+        "canonical": "#4a2c18",
+        "tonalRamp": [
+          "#140b05",
+          "#20110a",
+          "#2e1a0e",
+          "#3c2313",
+          "#4a2c18",
+          "#6e452a",
+          "#9a6c48",
+          "#cba081"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Slab",
+        "purpose": "Page h1 and the tin lockup. Bevan caps, tight and low-leaded."
+      },
+      "headline": {
+        "displayName": "Headline Slab",
+        "purpose": "h2 section openers and board titles."
+      },
+      "title": {
+        "displayName": "Title Slab",
+        "purpose": "h3 panel and card heads; café names step down to --step-1."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default running text in Archivo."
+      },
+      "prose": {
+        "displayName": "Lead Prose",
+        "purpose": "The lead passage under a heading, one step up, capped at 68ch."
+      },
+      "label": {
+        "displayName": "Label Caps",
+        "purpose": "Buttons, nav, table heads, form labels, city lines. Uppercase, 0.12em."
+      },
+      "descriptor": {
+        "displayName": "Descriptor Line",
+        "purpose": "The letterspaced line a tin prints under its lockup. Once per surface."
+      },
+      "stamp": {
+        "displayName": "Stamp Mark",
+        "purpose": "Net-weight and lot marks only. Uppercase, 0.2em, struck at 82% opacity."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift-1",
+        "value": "0 2px 4px rgba(12, 10, 9, 0.4)",
+        "purpose": "A label lying flat: stacked hours cards, the CLOSING SOON band."
+      },
+      {
+        "name": "lift-2",
+        "value": "0 6px 18px rgba(12, 10, 9, 0.45)",
+        "purpose": "Sheets that hold data: the hours sheet, the menu sheet, roast bags."
+      },
+      {
+        "name": "lift-3",
+        "value": "0 14px 40px rgba(12, 10, 9, 0.5)",
+        "purpose": "The masthead label band only. One element per page earns it."
+      },
+      {
+        "name": "mascot-drop",
+        "value": "drop-shadow(0 10px 22px rgba(12, 10, 9, 0.55))",
+        "purpose": "Cut artwork (the mascot) gets a drop-shadow, not a box-shadow."
+      },
+      {
+        "name": "flash-drop",
+        "value": "drop-shadow(0 2px 3px rgba(28, 26, 24, 0.35))",
+        "purpose": "The starburst flash sitting on the ivory sheet."
+      },
+      {
+        "name": "focus-field",
+        "value": "0 0 0 3px rgba(240, 120, 56, 0.35)",
+        "purpose": "Form field focus, replacing the global outline inside the field rectangle."
+      },
+      {
+        "name": "today-rule",
+        "value": "inset 2px 0 0 #f07838, inset -2px 0 0 #f07838",
+        "purpose": "The today column printed as a rule down the hours sheet."
+      }
+    ],
+    "motion": [
+      {
+        "name": "beat",
+        "value": "260ms",
+        "purpose": "The single beat. Every transition in the system runs on it."
+      },
+      {
+        "name": "beat-slow",
+        "value": "460ms",
+        "purpose": "The one longer move, where a single beat reads clipped."
+      },
+      {
+        "name": "press",
+        "value": "cubic-bezier(0.16, 0.84, 0.3, 1)",
+        "purpose": "The only easing curve. Printed matter lands; it does not bounce."
+      },
+      {
+        "name": "stamp",
+        "value": "@keyframes stamp { from { transform: scale(1.5) rotate(-7deg); opacity: 0 } to { transform: scale(1) rotate(0deg); opacity: 1 } }",
+        "purpose": "The one authored moment: the status flash lands once per flash, suppressed under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "640px"
+      },
+      {
+        "name": "tin-retune",
+        "value": "700px"
+      },
+      {
+        "name": "one-column",
+        "value": "900px"
+      },
+      {
+        "name": "board-swap",
+        "value": "1120px"
+      },
+      {
+        "name": "page-max",
+        "value": "1360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Quiet Call",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "The default call on the tin body: keylined, inverting to the label band on hover.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Call (707) 555-0134</a>",
+      "css": ".ds-btn { display: inline-block; padding: var(--sp-3, 0.75rem) var(--sp-5, 1.5rem); font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--text, #f4e9d8); border: 2px solid var(--text-faint, #afa89d); border-radius: var(--radius-control, 5px); transition: border-color 260ms cubic-bezier(0.16,0.84,0.3,1), color 260ms cubic-bezier(0.16,0.84,0.3,1), background-color 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-btn:hover { border-color: var(--label, #f4e9d8); color: var(--ink, #1c1a18); background: var(--label, #f4e9d8); } .ds-btn:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; }"
+    },
+    {
+      "name": "Loud Call",
+      "kind": "button",
+      "refersTo": "button-loud",
+      "description": "The orange spot-ink call. One per section at most.",
+      "html": "<a class=\"ds-btn-loud\" href=\"#\">See the menu</a>",
+      "css": ".ds-btn-loud { display: inline-block; padding: var(--sp-3, 0.75rem) var(--sp-5, 1.5rem); font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--ink, #1c1a18); background: var(--spot-orange, #f07838); border: 2px solid var(--spot-orange, #f07838); border-radius: var(--radius-control, 5px); transition: background-color 260ms cubic-bezier(0.16,0.84,0.3,1), border-color 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-btn-loud:hover { background: var(--spot-orange-lit, #ff9457); border-color: var(--spot-orange-lit, #ff9457); } .ds-btn-loud:active { transform: translateY(1px); } .ds-btn-loud:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; }"
+    },
+    {
+      "name": "Form Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Text input on a label band: near-white paper, ink keyline, orange focus ring inside its own rectangle.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field__label\" for=\"ds-biz\">Business name</label><input class=\"ds-field__input\" id=\"ds-biz\" type=\"text\" placeholder=\"Six Rivers Diner\" /></div>",
+      "css": ".ds-field { background: var(--label, #f4e9d8); padding: 1rem; border-radius: var(--radius-tin, 14px); } .ds-field__label { display: block; font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--on-label-dim, #5c5346); margin-bottom: 0.5rem; } .ds-field__input { width: 100%; padding: 0.75rem; font: inherit; font-family: var(--font-text, Archivo, sans-serif); background: var(--paper, #fffdf8); color: var(--on-label, #1c1a18); border: 2px solid rgba(28,26,24,0.35); border-radius: var(--radius-field, 6px); transition: border-color 260ms cubic-bezier(0.16,0.84,0.3,1), box-shadow 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-field__input::placeholder { color: rgba(28,26,24,0.5); } .ds-field__input:hover { border-color: rgba(28,26,24,0.6); } .ds-field__input:focus-visible { outline: none; border-color: var(--spot-orange, #f07838); box-shadow: 0 0 0 3px rgba(240,120,56,0.35); } .ds-field__input[aria-invalid='true'] { border-color: var(--spot-red, #9b2a18); }"
+    },
+    {
+      "name": "Masthead Nav",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Uppercase Archivo links on the tin; the current page reads as a struck label plate.",
+      "html": "<nav class=\"ds-nav\"><ul><li><a href=\"#\" aria-current=\"page\">Locations</a></li><li><a href=\"#\">Menu</a></li><li><a href=\"#\">Wholesale</a></li></ul></nav>",
+      "css": ".ds-nav { background: var(--tin-field, #2a2725); border-bottom: 2px solid var(--ink, #1c1a18); padding: 1rem; } .ds-nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 0; } .ds-nav a { display: block; padding: 0.5rem 0.75rem; font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--text-dim, #b3a894); border: 1px solid transparent; border-radius: var(--radius-control, 5px); transition: color 260ms cubic-bezier(0.16,0.84,0.3,1), border-color 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-nav a:hover { color: var(--text, #f4e9d8); border-color: var(--text-faint, #afa89d); } .ds-nav a[aria-current='page'] { color: var(--ink, #1c1a18); background: var(--label, #f4e9d8); border-color: var(--ink, #1c1a18); box-shadow: inset 0 0 0 1px rgba(28,26,24,0.35); } .ds-nav a:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; }"
+    },
+    {
+      "name": "Label Band",
+      "kind": "card",
+      "refersTo": "label-panel",
+      "description": "The ivory band on the tin: ink keyline, tin corner, inner hairline rule, off-register orange edge.",
+      "html": "<div class=\"ds-band\"><h2 class=\"ds-band__lockup\">Jitter Bean<span> Coffee Co.</span></h2></div>",
+      "css": ".ds-band { position: relative; isolation: isolate; background: var(--label, #f4e9d8); border: 2px solid var(--ink, #1c1a18); border-radius: var(--radius-tin, 14px); padding: 1.5rem 2rem; box-shadow: 0 14px 40px rgba(12,10,9,0.5); } .ds-band::after { content: ''; position: absolute; inset: -3px -2px 1px -4px; border: 1px solid var(--spot-orange, #f07838); border-radius: var(--radius-tin, 14px); opacity: 0.4; z-index: -1; pointer-events: none; } .ds-band::before { content: ''; position: absolute; inset: 7px; border: 1px solid rgba(28,26,24,0.45); border-radius: 8px; pointer-events: none; } .ds-band__lockup { margin: 0; font-family: var(--font-display, Bevan, Georgia, serif); font-weight: 400; color: var(--on-label, #1c1a18); font-size: clamp(2rem, 8vw, 4rem); line-height: 0.86; letter-spacing: -0.035em; text-transform: uppercase; } .ds-band__lockup span { display: block; font-size: 0.38em; letter-spacing: 0.02em; color: var(--on-label-dim, #5c5346); margin-top: 0.22em; }"
+    },
+    {
+      "name": "Open Flash",
+      "kind": "custom",
+      "refersTo": "flash-open",
+      "description": "The stamped spot-ink starburst that marks a café open right now. Computed vector, stretched to an oval, ink text struck over it.",
+      "html": "<span class=\"ds-flash\"><svg viewBox=\"0 0 100 100\" preserveAspectRatio=\"none\" aria-hidden=\"true\" focusable=\"false\"><path fill=\"#f07838\" d=\"M50.00 0.00 L55.83 9.42 L64.09 2.03 L67.03 12.71 L77.03 7.94 L76.85 19.01 L87.79 17.26 L84.49 27.83 L95.48 29.23 L89.34 38.45 L99.49 42.88 L91.00 50.00 L99.49 57.12 L89.34 61.55 L95.48 70.77 L84.49 72.17 L87.79 82.74 L76.85 80.99 L77.03 92.06 L67.03 87.29 L64.09 97.97 L55.83 90.58 L50.00 100.00 L44.17 90.58 L35.91 97.97 L32.97 87.29 L22.97 92.06 L23.15 80.99 L12.21 82.74 L15.51 72.17 L4.52 70.77 L10.66 61.55 L0.51 57.12 L9.00 50.00 L0.51 42.88 L10.66 38.45 L4.52 29.23 L15.51 27.83 L12.21 17.26 L23.15 19.01 L22.97 7.94 L32.97 12.71 L35.91 2.03 L44.17 9.42 Z\" /></svg><span class=\"ds-flash__text\">Open till 6p</span></span>",
+      "css": ".ds-flash { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 15ch; padding: 0.75rem 1.5rem; isolation: isolate; animation: ds-stamp 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-flash svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; filter: drop-shadow(0 2px 3px rgba(28,26,24,0.35)); } .ds-flash__text { font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; line-height: 1.15; text-align: center; letter-spacing: 0.02em; color: var(--ink, #1c1a18); text-wrap: balance; } @keyframes ds-stamp { from { transform: scale(1.5) rotate(-7deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } } @media (prefers-reduced-motion: reduce) { .ds-flash { animation: none; } }"
+    },
+    {
+      "name": "Closing Soon Band",
+      "kind": "custom",
+      "refersTo": "flash-closing",
+      "description": "The litho-red band a café takes inside its last open hour. A band, never a burst.",
+      "html": "<span class=\"ds-closing\"><span class=\"ds-closing__text\">Closing in 25 min</span></span>",
+      "css": ".ds-closing { display: inline-flex; align-items: center; justify-content: center; min-width: 15ch; padding: 0.75rem 1.5rem; background: var(--spot-red, #9b2a18); border-radius: var(--radius-band, 2px); box-shadow: 0 2px 4px rgba(12,10,9,0.4); } .ds-closing__text { font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; line-height: 1.15; text-align: center; letter-spacing: 0.02em; color: var(--label, #f4e9d8); }"
+    },
+    {
+      "name": "Stamp Mark",
+      "kind": "chip",
+      "refersTo": "stamp-mark",
+      "description": "The net-weight / lot mark struck on a panel edge. Never a kicker above a heading. Tones: label on the tin, ink on a label band, and orange (spot-orange-ink at 0.95 opacity so it clears the contrast floor on a tin panel); only label and ink currently ship callers.",
+      "html": "<span class=\"ds-stamp\">Net wt. 12 oz</span>",
+      "css": ".ds-stamp { display: inline-block; padding: 0.32em 0.7em; font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; line-height: 1.1; white-space: nowrap; color: var(--label-dim, #d6c9b2); border: 2px solid currentColor; border-radius: var(--radius-mark, 3px); rotate: -3deg; opacity: 0.82; }"
+    },
+    {
+      "name": "Hours Sheet Row",
+      "kind": "card",
+      "refersTo": "label-panel",
+      "description": "One café row from the dense hours sheet, with the today column printed as a rule.",
+      "html": "<div class=\"ds-sheet\"><table class=\"ds-grid\"><thead><tr><th>Café</th><th>Mon</th><th class=\"is-today\">Tue</th><th>Wed</th></tr></thead><tbody><tr><th scope=\"row\"><span class=\"ds-grid__cafe\">Plaza</span><span class=\"ds-grid__city\">Arcata</span></th><td>6a–6p</td><td class=\"is-today\">6a–6p</td><td>6a–6p</td></tr></tbody></table></div>",
+      "css": ".ds-sheet { background: var(--label, #f4e9d8); border: 2px solid var(--ink, #1c1a18); border-radius: var(--radius-tin, 14px); overflow: clip; box-shadow: 0 6px 18px rgba(12,10,9,0.45); } .ds-grid { width: 100%; border-collapse: collapse; color: var(--on-label, #1c1a18); font-family: var(--font-text, Archivo, sans-serif); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; } .ds-grid th, .ds-grid td { text-align: left; padding: 0.75rem; border-bottom: 1px solid rgba(28,26,24,0.18); font-size: var(--step--1, 0.85rem); } .ds-grid thead th { font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-label-dim, #5c5346); background: var(--label-warm, #ece0cb); border-bottom: 2px solid var(--ink, #1c1a18); white-space: nowrap; } .ds-grid tbody tr:last-child th, .ds-grid tbody tr:last-child td { border-bottom: 0; } .ds-grid__cafe { display: block; font-family: var(--font-display, Bevan, Georgia, serif); font-size: 1.25rem; line-height: 1; letter-spacing: -0.01em; font-weight: 400; } .ds-grid__city { display: block; font-size: var(--step--1, 0.85rem); letter-spacing: 0.12em; text-transform: uppercase; color: var(--on-label-dim, #5c5346); } .ds-grid .is-today { background: rgba(240,120,56,0.14); box-shadow: inset 2px 0 0 var(--spot-orange, #f07838), inset -2px 0 0 var(--spot-orange, #f07838); font-weight: 700; }"
+    },
+    {
+      "name": "Roast Swatch",
+      "kind": "custom",
+      "refersTo": "tin-panel",
+      "description": "The roast ramp used as a real data scale: each bar mixes toward the dark end by its own depth value.",
+      "html": "<ol class=\"ds-roasts\"><li style=\"--depth:0\"><span class=\"ds-roast__name\">House</span><span class=\"ds-roast__level\">Medium</span><span class=\"ds-roast__bar\"></span></li><li style=\"--depth:0.4\"><span class=\"ds-roast__name\">Espresso</span><span class=\"ds-roast__level\">Medium-dark</span><span class=\"ds-roast__bar\"></span></li><li style=\"--depth:1\"><span class=\"ds-roast__name\">French</span><span class=\"ds-roast__level\">Dark</span><span class=\"ds-roast__bar\"></span></li></ol>",
+      "css": ".ds-roasts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; list-style: none; padding: 0; margin: 0; } .ds-roasts li { display: grid; gap: 0.25rem; } .ds-roast__name { font-family: var(--font-display, Bevan, Georgia, serif); font-weight: 400; font-size: 1.25rem; line-height: 1; color: var(--text, #f4e9d8); } .ds-roast__level { font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); color: var(--text-dim, #b3a894); } .ds-roast__bar { display: block; height: 6px; margin-top: 0.5rem; border-radius: 999px; background: color-mix(in oklab, var(--roast-4, #4a2c18) calc(var(--depth) * 100%), var(--roast-1, #c8a06a)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Coffee Tin",
+    "overview": "The site is a printed object, not a page about coffee. Every surface is either the charcoal body of a keywind tin or an ivory label band lithographed onto it, keylined in ink black with the tin's own rounded corners. Depth comes from the label sitting on the body — a hard 2px keyline plus an offset-and-blur lift — never from a glass card floating in a gradient. Halftone dot texture and a faint off-register second-ink edge are carried as real printing artifacts, at 6-9% opacity, so they read as press behaviour rather than as a filter.\n\nThe palette is rationed the way a two-plate press rations plates. The tin body and the label stock do the work; brand orange and litho red are spot inks, spent on live state and on flashes. Type is a two-face pairing: Bevan, a spurred Clarendon slab matched to the client's own logo, set tight and low-leaded for every heading; Archivo for everything else, with letterspaced uppercase carrying the small structural labels a printed tin uses for net weights, descriptors and column heads. Numbers are tabular everywhere, because the hours board is the product.\n\nIt refuses the arrangement this category ships by default: the full-bleed latte-art hero with a centred tagline and three cards under it. It also refuses the two named anti-references — corporate chain polish and the generic small-business template.",
+    "keyCharacteristics": [
+      "Charcoal tin field with ivory label bands, keylined and cornered like a printed tin",
+      "Two spot inks only, spent on state and flashes, never on decoration",
+      "Bevan slab caps against letterspaced Archivo uppercase labels",
+      "Printed-matter motion: one beat, no easing theatrics, no parallax",
+      "Tabular figures on every time and number",
+      "Coffee colour used as a real data scale, not as a mood"
+    ],
+    "rules": [
+      {
+        "name": "The Two-Plate Rule",
+        "body": "Orange and red are spot inks on a press, not a palette. Orange marks live state, action and the mascot; red marks CLOSING SOON and error. Neither sets a heading: every section head on the tin is text, and the footer heads are label-dim (7.18:1 on panel). If a new surface wants either ink for emphasis, it does not get it — it gets the label band.",
+        "section": "colors"
+      },
+      {
+        "name": "The Client Artwork Exception",
+        "body": "The two-ink ration governs everything the design system draws. It does not govern a piece of client artwork whose own colour carries its meaning. The reusable-mug poster is full-colour green and ships unrecoloured, shown at its own colour rather than duotoned onto the ink ramp: its whole message is go green, and printing it orange would have made the system contradict the copy it illustrates. The test is decoration or content — decoration gets rationed, content does not. This is an exception with a stated reason, not a loosening; nothing the system itself draws may claim it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Never-Grey Rule",
+        "body": "Secondary and tertiary text is tinted from the stock it sits on. text-dim and text-faint on the tin, on-label-dim and on-label-faint on ivory. A neutral grey anywhere is a bug.",
+        "section": "colors"
+      },
+      {
+        "name": "The Audited Floor Rule",
+        "body": "Every tint in this system was chosen by computation and recomputed against the shipped code, never estimated by eye. text-faint and on-label-faint are the dimmest text tints that ship: 6.3:1 on the tin field and 4.99:1 on label stock. They are the floor, not a suggestion, and the product's WCAG 2.2 AA commitment is what makes them binding.",
+        "section": "colors"
+      },
+      {
+        "name": "The Orange-By-Ground Rule",
+        "body": "Orange does not set headings, and where it does run at text weight it picks its value from the ground it lands on. On tin-field, base spot-orange is legal at 5.26:1. On tin-panel it measures 4.16:1 and fails — that ground takes spot-orange-ink instead (5.37:1), and the Stamp's orange tone additionally sits at 0.95 opacity so its composite against the panel clears the floor at 4.99:1 rather than relying on being aria-hidden. On label stock, orange is never text (2.35:1); it appears there only as a fill with ink struck on top of it (6.15:1).",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every time, .tabular and [data-hours] element runs font-variant-numeric: tabular-nums with 'tnum' 1. Hours align in their column or the board stops being a board.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two-Face Rule",
+        "body": "Bevan sets headings and café names and nothing else. Every label, number, button and body line is Archivo. A third face, or Bevan below --step-1, is out of system.",
+        "section": "typography"
+      },
+      {
+        "name": "The Letterspacing Ladder Rule",
+        "body": "Uppercase Archivo tracks by job, not by taste: 0.12em for controls and labels, 0.16em for footer heads, 0.18em for descriptors, 0.2em for stamps. Headings track negative (-0.02em, -0.035em on the lockup).",
+        "section": "typography"
+      },
+      {
+        "name": "The One Dataset, Two Renderings Rule",
+        "body": "The hours board ships the same data twice — a dense café-by-day table above 1120px, stacked per-café disclosures below — and neither is a degraded version of the other. Both render all six cafés as real text.",
+        "section": "layout"
+      },
+      {
+        "name": "The Keyline-First Rule",
+        "body": "Separation is a 2px ink keyline. Shadow is what the keyline sits on top of, never the only edge a surface has.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Printed-Matter Motion Rule",
+        "body": "Everything moves in one beat: --beat 260ms (--beat-slow 460ms where a longer move is needed) on --press cubic-bezier(0.16, 0.84, 0.3, 1). Transitions carry colour and border only. The one authored moment in the whole system is the stamp: the status flash lands from scale(1.5) rotate(-7deg) at zero opacity to rest, fired once per flash on landing and never replayed, and fully suppressed under prefers-reduced-motion, where the flash is simply present. No parallax, no scroll reveals, no easing theatrics.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Crop-Within-The-Margin Rule",
+        "body": "A photograph the system chose is cropped freely to its grid: the crew photo holds 16/10 with object-fit: cover and loses whatever the frame loses. A piece of client artwork is fitted only within its own blank margin — measure the margin first, crop no further than it, and never into the art. The mug poster is 1100x1424 (0.772) with a blank band of about 4% at the bottom edge and more at the top; a 1/1 box would need 162px a side and eat the headline, which is why it was matted before, while 4/5 needs 24.5px a side and lands inside the blank band. So it ships aspect-ratio: 4/5 with object-fit: cover, filling its panel edge to edge with nothing printed lost. Below 900px it reverts to aspect-ratio: auto and runs at its native ratio, uncropped. Extending a canvas outward is not an alternative: this poster's artwork runs to its own edges, so gradient extrapolation smeared the edge lettering into horizontal streaks and mirroring produced reversed letters. Neither shipped. Measure, then crop inside the measurement.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Off-Register Rule",
+        "body": "The homepage band carries a 1px orange keyline offset by -3px/-2px/1px/-4px at 40% opacity behind the ink one. Off-register is asymmetric and sub-pixel-scale; a symmetric second border is a frame, not a misregistration, and is out of system.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Global Reach Rule",
+        "body": "Astro scoped styles do not cross into a child component's markup — reach the burst as .owner :global(svg) from an element you own. This trap bit the build twice.",
+        "section": "components"
+      },
+      {
+        "name": "The Named Corner Rule",
+        "body": "Six named corners carry the system and nothing is set by literal: tin 14px for bands and sheets, panel 8px for inset blocks, field 6px for inputs and roast bags, control 5px for buttons and nav, mark 3px for struck marks, band 2px for the CLOSING SOON band and the focus ring. 999px survives only on the scrollbar thumb and the two roast swatch bars.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Drawn Marker Rule",
+        "body": "Icons and markers are inline SVG with a 2px currentColor stroke, never a text character. The disclosure marker is two drawn strokes in a keylined box, the vertical one collapsing via scaleY(0) on [open], so the stroke weight is the system's and does not shift with the font.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do put data on the ivory label band and atmosphere on the tin body. If a visitor has to read numbers, it is a label.",
+      "Do keyline every band and panel in 2px ink and corner it at 14px.",
+      "Do use the 5px control corner for every button, nav item and field control.",
+      "Do spend orange on live state, the mascot, focus and one loud call per section; spend red on CLOSING SOON and errors only.",
+      "Do pick the orange by its ground: spot-orange for text on the tin field, spot-orange-ink for text on a tin panel.",
+      "Do set every time and count in tabular figures.",
+      "Do keep motion to one 260ms beat on cubic-bezier(0.16, 0.84, 0.3, 1), and keep the stamp as the only authored moment.",
+      "Do encode roast depth with the ramp via color-mix, so the colour carries data.",
+      "Do reach a child component's SVG with :global(svg) from an element you own, and give it an explicit box.",
+      "Do render missing data as visibly absent, in on-label-faint.",
+      "Do take every corner from a named radius token; there are six, and they cover every shape the build makes.",
+      "Do draw icons and markers as inline SVG with a 2px currentColor stroke.",
+      "Do measure a piece of client artwork's blank margin before fitting it to a box, and pick the ratio that crops inside that margin."
+    ],
+    "donts": [
+      "Don't use orange or red as decoration, as a heading colour, as a section background, or as a mood wash. They are spot inks.",
+      "Don't recolour client artwork to bring it inside the ration when its colour is its message, and don't crop into its art or extend its canvas to make it fit.",
+      "Don't set base spot-orange at text weight on tin-panel — it measures 4.16:1 and fails AA. That ground takes spot-orange-ink. Never set orange as text on label stock at all.",
+      "Don't reintroduce the full-round pill as a control shape. 999px is for the scrollbar thumb and the roast swatch bars.",
+      "Don't invent a radius or write a literal one. Use the six tokens: 14px, 8px, 6px, 5px, 3px, 2px.",
+      "Don't hardcode a colour literal in a component. Every value, including form paper and the success tone, is a token.",
+      "Don't use a neutral grey for secondary text. Tint from the stock.",
+      "Don't add a third typeface, or set Bevan below --step-1.",
+      "Don't replace the computed starburst with a decorative polygon or an image.",
+      "Don't add parallax, scroll reveals, staggered entrances or a second easing curve.",
+      "Don't ship a kicker or eyebrow above a heading — the Stamp is a struck corner mark, not a kicker, and the system has no eyebrow.",
+      "Don't use a hard offset shadow. Depth here is offset plus blur in near-black."
+    ]
+  }
+}

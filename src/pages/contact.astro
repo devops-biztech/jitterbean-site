@@ -1,0 +1,232 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import giftcard from '../assets/img/giftcard.png';
+---
+
+<Base
+  title="Contact — Jitter Bean Coffee Co."
+  description="Reach Jitter Bean Coffee Co. by phone or email, find the business office, and buy a gift card."
+>
+  <header class="page masthead-block">
+    <h1>Get in touch.</h1>
+  </header>
+
+  <div class="page section contact">
+    <section class="reach" aria-labelledby="reach-head">
+      <h2 id="reach-head" class="section-head">Reach a person</h2>
+
+      <dl class="reach__list">
+        <div class="reach__row">
+          <dt>Phone</dt>
+          <dd><a href={`tel:${site.phoneHref}`}>{site.phone}</a></dd>
+        </div>
+        <div class="reach__row">
+          <dt>Email</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div class="reach__row">
+          <dt>Wholesale</dt>
+          <dd><a href="/wholesale">Send an inquiry</a></dd>
+        </div>
+      </dl>
+
+      <div class="office">
+        <h3>Business office</h3>
+        <p class="office__addr">
+          {site.office.street}<br />
+          {site.office.city}, {site.office.state} {site.office.zip}
+        </p>
+        <p class="office__note">
+          {site.office.note} For a café, see <a href="/locations">locations</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="gift" aria-labelledby="gift-head">
+      <Image
+        class="gift__art"
+        src={giftcard}
+        alt="Jitter Bean Coffee Co. gift card — locally owned, community minded, Humboldt County, California"
+        widths={[380, 760]}
+        sizes="(max-width: 900px) 92vw, 380px"
+        loading="lazy"
+      />
+      <div class="gift__text">
+        <h2 id="gift-head">Gift cards</h2>
+        <p>
+          Gift cards are handled through Clover. You'll leave
+          jitterbeancoffee.com to finish the purchase.
+        </p>
+        <a
+          class="btn btn--loud"
+          href={site.giftCardUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Buy a gift card
+        </a>
+        <p class="gift__alt">
+          Or pick one up in person at any <a href="/locations">café</a>.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <section class="page section retail">
+    <h2 class="section-head">Buying coffee by the bag</h2>
+    <p class="prose">
+      Retail bags are sold in person at every café — we don't ship. Call the
+      office or stop in and somebody will sort you out. For volume,
+      <a href="/wholesale">wholesale</a> runs in 5&nbsp;lb and 12&nbsp;oz.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .masthead-block {
+    padding-top: var(--sp-8);
+  }
+
+  .masthead-block h1 {
+    font-size: var(--step-5);
+  }
+
+  .section {
+    margin-top: var(--sp-8);
+  }
+
+  .section-head {
+    font-size: var(--step-2);
+    color: var(--text);
+    margin-bottom: var(--sp-5);
+  }
+
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: var(--sp-7);
+    align-items: start;
+  }
+
+  .reach__list {
+    display: grid;
+    gap: 0;
+    border-top: var(--keyline) solid var(--text-faint);
+  }
+
+  .reach__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding-block: var(--sp-4);
+    border-bottom: var(--keyline-hair) solid rgba(244, 233, 216, 0.18);
+  }
+
+  .reach__row dt {
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .reach__row dd {
+    font-size: var(--step-1);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .office {
+    margin-top: var(--sp-7);
+    padding: var(--sp-5);
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+  }
+
+  .office h3 {
+    font-family: var(--font-text);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .office__addr {
+    margin-top: var(--sp-3);
+    font-size: var(--step-1);
+  }
+
+  .office__note {
+    margin-top: var(--sp-3);
+    font-size: var(--step--1);
+    color: var(--text-faint);
+  }
+
+  .gift {
+    background: var(--tin-panel);
+    border: var(--keyline) solid var(--ink);
+    border-radius: var(--radius-tin);
+    overflow: clip;
+  }
+
+  .gift__art {
+    width: 100%;
+    height: auto;
+    border-bottom: var(--keyline) solid var(--ink);
+  }
+
+  .gift__text {
+    padding: var(--sp-5);
+  }
+
+  .gift__text h2 {
+    font-size: var(--step-2);
+  }
+
+  .gift__text p {
+    margin-top: var(--sp-4);
+    color: var(--text-dim);
+  }
+
+  .gift__alt {
+    font-size: var(--step--1);
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: var(--sp-5);
+    padding: var(--sp-3) var(--sp-5);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--radius-control);
+    border: var(--keyline) solid var(--ink);
+  }
+
+  .btn--loud {
+    background: var(--spot-orange);
+    color: var(--ink);
+    transition: background-color var(--beat) var(--press);
+  }
+
+  .btn--loud:hover {
+    background: var(--spot-orange-lit);
+  }
+
+  .retail .prose {
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

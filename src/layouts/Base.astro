@@ -1,0 +1,332 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../data/site';
+import { locations, DAY_NAMES, type WeekHours } from '../data/locations';
+import { Image } from 'astro:assets';
+import logoBadge from '../assets/img/logo-badge.png';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Page-level class hook for surfaces that change the band treatment. */
+  bodyClass?: string;
+}
+
+const { title, description, bodyClass } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+/*
+  Structured data carries only what the client has confirmed. Hours are
+  published per café the moment `verified` flips true — until then they stay
+  out of schema.org entirely, because wrong hours in search results are worse
+  than no hours. The office is an Organization address, never a café.
+*/
+const confirmed = locations.filter((l) => l.verified && l.address && l.hours);
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: Astro.site?.href ?? 'https://www.jitterbeancoffee.com',
+  email: site.email,
+  telephone: site.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.office.street,
+    addressLocality: site.office.city,
+    addressRegion: site.office.state,
+    postalCode: site.office.zip,
+    addressCountry: 'US',
+  },
+};
+
+/**
+ * Groups days that share hours into schema.org OpeningHoursSpecification
+ * entries. This is the piece the incumbent site never had, and it is what
+ * puts "Open now" beside a café in a search result.
+ */
+function openingSpec(hours: WeekHours) {
+  const buckets = new Map<string, string[]>();
+  hours.forEach((day, i) => {
+    if (!day) return;
+    const key = `${day.open}-${day.close}`;
+    buckets.set(key, [...(buckets.get(key) ?? []), DAY_NAMES[i]]);
+  });
+  return [...buckets.entries()].map(([key, days]) => {
+    const [opens, closes] = key.split('-');
+    return {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: days,
+      opens,
+      closes,
+    };
+  });
+}
+
+const cafeLd = confirmed.map((l) => ({
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: `${site.name} — ${l.name}`,
+  // Locals name some cafés for a street they are not addressed on, so the
+  // common name is published alongside the postal address.
+  alternateName: [`${site.shortName} ${l.name}`, `${site.shortName} ${l.city}`],
+  url: new URL(`/locations#${l.slug}`, Astro.site ?? 'https://www.jitterbeancoffee.com').href,
+  servesCuisine: 'Coffee',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: l.address,
+    addressLocality: l.city,
+    addressRegion: 'CA',
+    postalCode: l.zip,
+    addressCountry: 'US',
+  },
+  openingHoursSpecification: openingSpec(l.hours!),
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#2a2725" />
+    <link rel="canonical" href={new URL(path, Astro.site ?? 'https://www.jitterbeancoffee.com')} />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/fonts/bevan-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+    {cafeLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <div class="page masthead__inner">
+        <a href="/" class="masthead__mark" aria-label={`${site.name} — home`}>
+          <Image src={logoBadge} alt="" widths={[180, 360]} sizes="(max-width: 720px) 224px, 315px" loading="eager" />
+        </a>
+
+        <nav class="masthead__nav" aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={item.href === path ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer halftone">
+      <div class="page footer__inner">
+        <div class="footer__block">
+          <p class="footer__wordmark">{site.name}</p>
+          <p class="descriptor">{site.tagline}</p>
+        </div>
+
+        <div class="footer__block">
+          <h2 class="footer__head">Get in touch</h2>
+          <ul class="footer__list">
+            <li><a href={`tel:${site.phoneHref}`}>{site.phone}</a></li>
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__block">
+          <h2 class="footer__head">Business office</h2>
+          <p class="footer__addr">
+            {site.office.street}<br />
+            {site.office.city}, {site.office.state} {site.office.zip}
+          </p>
+          <p class="footer__caveat">{site.office.note}</p>
+        </div>
+
+        <div class="footer__block">
+          <h2 class="footer__head">More</h2>
+          <ul class="footer__list">
+            {nav.slice(1).map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+          </ul>
+        </div>
+      </div>
+
+      <div class="page footer__rule">
+        <p>&copy; {new Date().getFullYear()} {site.name}</p>
+        <p>Thanks for visiting.</p>
+      </div>
+    </footer>
+
+    <style>
+      .masthead {
+        border-bottom: var(--keyline) solid var(--ink);
+        background: var(--tin-field);
+        position: relative;
+        z-index: 0;
+      }
+
+      .masthead__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-4) var(--sp-6);
+        padding-block: var(--sp-4);
+      }
+
+      .masthead__mark {
+        flex: none;
+        width: 250px;
+      }
+
+      .masthead__mark img {
+        width: 100%;
+        height: auto;
+      }
+
+      .masthead__nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-2);
+        list-style: none;
+        padding: 0;
+      }
+
+      .masthead__nav a {
+        display: block;
+        padding: var(--sp-2) var(--sp-3);
+        font-size: var(--step--1);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--text-dim);
+        border: var(--keyline-hair) solid transparent;
+        border-radius: var(--radius-control);
+        transition: color var(--beat) var(--press), border-color var(--beat) var(--press);
+      }
+
+      .masthead__nav a:hover {
+        color: var(--text);
+        border-color: var(--text-faint);
+      }
+
+      /* The current page reads as a struck label plate, keylined like the band. */
+      .masthead__nav a[aria-current='page'] {
+        color: var(--ink);
+        background: var(--label);
+        border-color: var(--ink);
+        box-shadow: inset 0 0 0 1px rgba(28, 26, 24, 0.35);
+      }
+
+      .footer {
+        --halftone-ink: rgba(244, 233, 216, 0.06);
+        margin-top: var(--sp-10);
+        border-top: var(--keyline) solid var(--ink);
+        background: var(--tin-panel);
+        padding-block: var(--sp-8) var(--sp-5);
+      }
+
+      .footer__inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: var(--sp-7) var(--sp-6);
+      }
+
+      .footer__wordmark {
+        font-family: var(--font-display);
+        font-size: var(--step-2);
+        line-height: 1;
+        margin-bottom: var(--sp-3);
+      }
+
+      .footer__head {
+        font-family: var(--font-text);
+        font-size: var(--step--1);
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--label-dim);
+        margin-bottom: var(--sp-4);
+      }
+
+      .footer__list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        gap: var(--sp-2);
+      }
+
+      .footer__list a {
+        color: var(--text-dim);
+        text-decoration: none;
+        transition: color var(--beat) var(--press);
+      }
+
+      .footer__list a:hover {
+        color: var(--text);
+        text-decoration: underline;
+      }
+
+      .footer__addr {
+        color: var(--text-dim);
+      }
+
+      .footer__caveat {
+        margin-top: var(--sp-2);
+        font-size: var(--step--1);
+        color: var(--text-faint);
+      }
+
+      .footer__rule {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: var(--sp-3);
+        margin-top: var(--sp-8);
+        padding-top: var(--sp-4);
+        border-top: var(--keyline-hair) solid var(--text-faint);
+        font-size: var(--step--1);
+        color: var(--text-faint);
+      }
+
+      /* On a phone the masthead must not eat the fold: the hours board is
+         what the visitor came for, so the chrome shrinks to make room. */
+      @media (max-width: 640px) {
+        .masthead__inner {
+          justify-content: center;
+          gap: var(--sp-3);
+          padding-block: var(--sp-3);
+        }
+        .masthead__mark {
+          width: 104px;
+        }
+        .masthead__nav ul {
+          justify-content: center;
+          gap: var(--sp-1);
+        }
+        .masthead__nav a {
+          padding: var(--sp-2) var(--sp-3);
+          letter-spacing: 0.06em;
+        }
+      }
+    </style>
+  </body>
+</html>

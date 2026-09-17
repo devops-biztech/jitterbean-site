@@ -1,0 +1,49 @@
+---
+/**
+ * The spot-ink flash a tin label stamps over its band. Authored as a real
+ * vector — the points are computed, not approximated with a polygon mask.
+ */
+interface Props {
+  points?: number;
+  /** Inner radius as a fraction of the outer. Lower = spikier. */
+  inset?: number;
+  class?: string;
+  fill?: string;
+  /** Let the burst fill a non-square box as an oval flash, the way a label prints it. */
+  stretch?: boolean;
+}
+
+const {
+  points = 22,
+  inset = 0.82,
+  class: className,
+  fill = 'var(--spot-orange)',
+  stretch = false,
+} = Astro.props;
+
+const r = 50;
+const cx = 50;
+const cy = 50;
+const step = Math.PI / points;
+
+let d = '';
+for (let i = 0; i < points * 2; i++) {
+  const radius = i % 2 === 0 ? r : r * inset;
+  // Start at 12 o'clock so the flash sits square on the band.
+  const angle = i * step - Math.PI / 2;
+  const x = cx + radius * Math.cos(angle);
+  const y = cy + radius * Math.sin(angle);
+  d += `${i === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)} `;
+}
+d += 'Z';
+---
+
+<svg
+  class={className}
+  viewBox="0 0 100 100"
+  aria-hidden="true"
+  focusable="false"
+  preserveAspectRatio={stretch ? 'none' : 'xMidYMid meet'}
+>
+  <path d={d} fill={fill} />
+</svg>
