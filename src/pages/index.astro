@@ -727,4 +727,19 @@ import mugProgram from '../assets/img/mug-program.png';
       gap: var(--sp-3);
     }
   }
+
+  /* From 1000px down the masthead is a pinned bar that sits above the page, so
+     the hero starts below it: the mascot still breaks the band's keyline, it
+     just no longer reaches up into the masthead. Desktop keeps the overlap. */
+  @media (max-width: 1000px) {
+    :global(.js) .tin {
+      padding-top: calc(clamp(var(--sp-6), 6vw, var(--sp-8)) + 44px);
+    }
+  }
+
+  @media (max-width: 700px) {
+    :global(.js) .tin {
+      padding-top: calc(clamp(var(--sp-7), 19vw, var(--sp-9)) + 44px);
+    }
+  }
 </style>

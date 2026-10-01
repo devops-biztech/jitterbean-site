@@ -209,8 +209,9 @@ orange and red spent sparingly as spot ink.
 - **Brand Orange** (`{colors.spot-orange}`): the live-state and affordance ink. It
   fills the OPEN starburst flash, the open-count badge, the today-column rule on the
   hours sheet (at 14% as a wash plus a 2px inset edge), the loud call-to-action, the
-  focus ring, the caret, the selection highlight, the link underline, the skip link
-  and the scrollbar thumb on hover. It is also the mascot's own colour. It sets no
+  focus ring, the caret, the selection highlight, the link underline, the skip link,
+  the scrollbar thumb on hover, and the phone menu's open-count burst and call
+  button. It is also the mascot's own colour. It sets no
   headings and no body copy.
 - **Brand Orange Lit** (`{colors.spot-orange-lit}`): hover state for orange-filled
   controls only. It never appears at rest.
@@ -236,7 +237,7 @@ orange and red spent sparingly as spot ink.
 - **Tin Field** (`{colors.tin-field}`): the page ground and the masthead. Also the
   `theme-color`, so the browser chrome joins the tin.
 - **Tin Panel** (`{colors.tin-panel}`): raised panels — programs, the menu call,
-  the wholesale aside, the footer.
+  the wholesale aside, the footer — and the ground of the phone site menu.
 - **Tin Panel Lit** (`{colors.tin-panel-lit}`): scrollbar thumb at rest; the one
   place the metal catches light.
 - **Ink Black** (`{colors.ink}`): every keyline and every border on a label band,
@@ -352,14 +353,33 @@ panel text blocks and `clamp(2rem, 6vw, 6rem)` for the large call panels.
 
 Grids are intrinsic rather than breakpoint-driven: the footer is
 `repeat(auto-fit, minmax(210px, 1fr))`, the roast ramp is four equal columns, the
-programs row is an asymmetric `0.8fr / 1.2fr` set to `align-items: stretch`. Four
+programs row is an asymmetric `0.8fr / 1.2fr` set to `align-items: stretch`. Five
 real breakpoints exist: **1120px**, where the hours board swaps from the dense table
 to stacked disclosure cards — the dense sheet needs about 1040px of its own, and
 below that `overflow: clip` was cutting the Status column and the OPEN flash off the
-right edge; **900px**, where the split, programs and menu-call grids drop to one
-column; **700px**, where the tin band retunes its padding and the mascot shrinks; and
-**640px**, where the masthead shrinks its mark from 150px to 104px and centres,
-because on a phone the chrome must not eat the fold the board needs.
+right edge; **1000px**, where the masthead becomes a pinned bar and the six nav links
+give way to the menu button — measured, not chosen: the links stop fitting beside
+the 250px mark below 1010px; **900px**, where the split, programs and menu-call grids
+drop to one column; **700px**, where the tin band retunes its padding and the mascot
+shrinks; and **640px**, which now applies only without script: the masthead shrinks
+its mark from 250px to 104px, centres and wraps the plain links, because on a phone
+the chrome must not eat the fold the board needs.
+
+**The Pinned Bar Rule.** At 1000px and below (with script) the masthead is
+`position: sticky; top: 0` at `z-index: 30`, its mark at `clamp(76px, 10vw, 120px)`
+and `{spacing.sp-3}` block padding, so the menu button stays reachable on long
+pages. Its measured height is published as `--masthead-h` (kept live by a
+ResizeObserver, 80px fallback) and is the only source for anything that sits under
+the bar: the site menu's top offset and `scroll-padding-top`
+(`--masthead-h` + `{spacing.sp-3}`), so anchor targets clear it. Never hardcode the
+bar's height. Above 1000px the masthead is not sticky and sits at `z-index: 0`.
+
+**The Hero Clearance Trade-off.** On desktop the homepage mascot reaches up out of
+the tin band and overlaps the masthead, which the masthead's `z-index: 0` allows.
+At 1000px and below the pinned bar has to sit above page content, so the band adds
+44px to its top padding and the mascot clears the bar instead. It still breaks the
+band's own keyline at every width. This is a deliberate responsive difference, not a
+regression: overlap the chrome only where the chrome does not pin.
 
 Side-by-side cards are stretched, not left to their own heights: `.programs` stretches
 its items and each panel is `grid-template-rows: auto 1fr`, so two cards of unequal
@@ -401,7 +421,10 @@ keyline sits on top of, never the only edge a surface has.
 authored moment in the whole system is the stamp: the status flash lands from
 `scale(1.5) rotate(-7deg)` at zero opacity to rest, fired once per flash on landing
 and never replayed, and fully suppressed under `prefers-reduced-motion`, where the
-flash is simply present. No parallax, no scroll reveals, no easing theatrics.
+flash is simply present. No parallax, no scroll reveals, no easing theatrics. The
+system's one other authored moment is the site menu's line reveal (see Components):
+chosen by the user over more decorative candidates, it is held to the same
+restraint and stays inside the menu.
 
 ## Shapes
 
@@ -498,8 +521,50 @@ out of system.
 - Uppercase Archivo 600 at the label step, tracked 0.1em, in `{colors.text-dim}`, with
   a transparent 1px border reserving the space. Hover brightens to `{colors.text}` and
   reveals the border in `{colors.text-faint}`. The current page reads as a struck
-  label plate: ivory fill, ink text, ink border and an inset 1px ink line. Below 640px
-  the whole masthead centres and tightens tracking to 0.06em.
+  label plate: ivory fill, ink text, ink border and an inset 1px ink line.
+- At 1000px and below, with script, the nav is hidden and the menu button opens the
+  site menu (below). Without script the plain links stay visible at every width;
+  below 640px they wrap centred under the mark and tighten tracking to 0.06em.
+
+### Site Menu (phone)
+The navigation below 1000px: a full-screen panel opened from the masthead's menu
+button, lying under the pinned bar on `{colors.tin-panel}` with the 6px halftone
+dot (ivory at 7%).
+- **Menu button:** a 44px square, no border, `{colors.text}`, the control corner.
+  Three drawn bars, 22px × 2.5px with square ends like every other rule on the
+  site, 6px apart. On `aria-expanded='true'` the outer bars rotate ±45° into an X
+  and the middle bar fades, on `--beat` / `--press`.
+- **Contents, in order:** the live open count — a 46px orange starburst (26 points,
+  0.86 inner ratio) with the count struck in ink Bevan in tabular figures, then
+  "locations open now" in uppercase Archivo 700 (a dim "of N listed" qualifier
+  appears only when some cafés have no published hours), the whole linking to
+  /locations; the six nav links in Bevan at `clamp(1.75rem, 1.2rem + 2.8vw,
+  2.75rem)`, line-height 1.05, −0.01em, each over a 1px ivory hairline at 14%; and
+  a full-width call button at the foot — orange fill, ink text, 2px ink keyline,
+  the control corner, `{spacing.sp-4}` padding. The current page takes a 2px
+  `{colors.label-dim}` underline at 0.18em offset rather than the desktop plate.
+- **The Line Reveal Rule.** Opening: the ground fades in over 140ms (linear). Each
+  link is its own `overflow: hidden` mask and its word rises from
+  `translateY(110%)` over 480ms on `--press`, staggered `80ms + i × 45ms`; the
+  hairline under it draws `scaleX(0 → 1)` from the left over 560ms on `--press`,
+  staggered `120ms + i × 45ms`. The count (40ms delay) and the call button (360ms)
+  rise 8px into place over 320ms. Closing is one 200ms ease-in fade of the whole
+  panel. Nothing bounces, scales or rotates; the words rise out of their own lines
+  and the rules print under them. The user picked this from a set of mockups and
+  rejected the more decorative candidates as cheesy — the restraint is the intent.
+  Under `prefers-reduced-motion` the global rule collapses every animation and the
+  close timer drops to 0.
+- **The Progressive Menu Rule.** An inline head script adds `.js` to `<html>`, and
+  every compact-masthead and menu style is gated on it; without script the plain
+  links stay. While open, `main`, the footer and the skip link are `inert` and page
+  scroll is locked. Focus moves to the first link on open and back to the button on
+  close; Escape closes; widening past 1000px closes it; a `pageshow` with
+  `persisted` resets it, so the Back button never restores a stuck-open menu.
+- **The One Clock Rule.** The open count uses `statusFor` from
+  `src/lib/open-state.ts` (open and closing-soon both count as open), fed by a
+  `#cafe-hours` JSON script the layout emits from the locations data. New
+  open/closed readers import that function. The hours board still carries its own
+  inline copy of the logic; that is a known duplication, not a pattern to follow.
 
 ### Starburst (signature)
 An authored vector flash: the point coordinates are computed (default 22 points,
@@ -552,7 +617,11 @@ with unpublished hours renders visibly absent, never invented.
   field, `{colors.spot-orange-ink}` for text on a tin panel.
 - **Do** set every time and count in tabular figures.
 - **Do** keep motion to one 260ms beat on `cubic-bezier(0.16, 0.84, 0.3, 1)`, and
-  keep the stamp as the only authored moment.
+  keep the stamp and the site menu's line reveal as the only two authored moments.
+- **Do** offset anything under the pinned masthead from `--masthead-h`, never from a
+  guessed height.
+- **Do** build script-dependent chrome so the page still works without it: gate on
+  `html.js`, and leave the plain links visible otherwise.
 - **Do** encode roast depth with the ramp via `color-mix`, so the colour carries data.
 - **Do** reach a child component's SVG with `:global(svg)` from an element you own,
   and give it an explicit box.
@@ -580,7 +649,10 @@ with unpublished hours renders visibly absent, never invented.
 - **Don't** use a neutral grey for secondary text. Tint from the stock.
 - **Don't** add a third typeface, or set Bevan below `--step-1`.
 - **Don't** replace the computed starburst with a decorative polygon or an image.
-- **Don't** add parallax, scroll reveals, staggered entrances or a second easing curve.
+- **Don't** add parallax, scroll reveals, staggered entrances or a second easing curve
+  to page content. The line reveal is the one stagger, and it stays inside the menu.
+- **Don't** write another copy of the open/closed logic. Import `statusFor` from
+  `src/lib/open-state.ts`.
 - **Don't** ship a kicker or eyebrow above a heading — the Stamp is a struck corner
   mark, not a kicker, and the system has no eyebrow.
 - **Don't** use a hard offset shadow. Depth here is offset plus blur in near-black.
