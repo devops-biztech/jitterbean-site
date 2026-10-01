@@ -4,6 +4,7 @@ import { site, nav } from '../data/site';
 import { locations, DAY_NAMES, type WeekHours } from '../data/locations';
 import { Image } from 'astro:assets';
 import logoBadge from '../assets/img/logo-badge.png';
+import Starburst from '../components/Starburst.astro';
 
 interface Props {
   title: string;
@@ -82,12 +83,20 @@ const cafeLd = confirmed.map((l) => ({
   },
   openingHoursSpecification: openingSpec(l.hours!),
 }));
+
+/** What the phone menu needs to show a live open count on every page. */
+const menuHours = {
+  timeZone: site.timeZone,
+  cafes: locations.map((l) => ({ slug: l.slug, hours: l.hours })),
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- Without script the plain wrapped links stay; with it, phones get the menu button. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -129,8 +138,56 @@ const cafeLd = confirmed.map((l) => ({
             }
           </ul>
         </nav>
+
+        <button
+          class="menu-btn"
+          type="button"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          data-menu-button
+        >
+          <span class="menu-btn__bar menu-btn__bar--1" aria-hidden="true"></span>
+          <span class="menu-btn__bar menu-btn__bar--2" aria-hidden="true"></span>
+          <span class="menu-btn__bar menu-btn__bar--3" aria-hidden="true"></span>
+        </button>
       </div>
     </header>
+
+    <div class="site-menu" id="site-menu" data-state="closed" data-site-menu>
+      <div class="site-menu__ground" aria-hidden="true"></div>
+      <nav class="site-menu__content" aria-label="Main">
+        <a class="site-menu__open" href="/locations">
+          <span class="site-menu__burst">
+            <Starburst points={26} inset={0.86} />
+            <b data-menu-open-count></b>
+          </span>
+          <span class="site-menu__open-text">
+            <span data-menu-open-verb>locations open now</span>
+            <span class="site-menu__open-qual" data-menu-open-qual></span>
+          </span>
+        </a>
+
+        <ul class="site-menu__links">
+          {
+            nav.map((item, i) => (
+              <li style={`--i: ${i}`}>
+                <a
+                  class="site-menu__link"
+                  href={item.href}
+                  aria-current={item.href === path ? 'page' : undefined}
+                >
+                  <span class="site-menu__ink">{item.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a class="site-menu__call" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+      </nav>
+    </div>
+    <script type="application/json" id="cafe-hours" set:html={JSON.stringify(menuHours)} />
 
     <main id="main">
       <slot />
@@ -307,26 +364,350 @@ const cafeLd = confirmed.map((l) => ({
         color: var(--text-faint);
       }
 
-      /* On a phone the masthead must not eat the fold: the hours board is
-         what the visitor came for, so the chrome shrinks to make room. */
+      /* --- The menu button and the phone menu ------------------------------ */
+      .menu-btn,
+      .site-menu {
+        display: none;
+      }
+
+      .menu-btn {
+        position: relative;
+        flex: none;
+        width: 44px;
+        height: 44px;
+        margin-right: calc(var(--sp-2) * -1);
+        border: 0;
+        border-radius: var(--radius-control);
+        background: none;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .menu-btn__bar {
+        position: absolute;
+        left: 11px;
+        width: 22px;
+        height: 2.5px;
+        /* Square ends, like every other rule on the site. */
+        background: currentColor;
+        transition:
+          transform var(--beat) var(--press),
+          opacity 140ms linear;
+      }
+      .menu-btn__bar--1 { top: 15px; }
+      .menu-btn__bar--2 { top: 21px; }
+      .menu-btn__bar--3 { top: 27px; }
+      .menu-btn[aria-expanded='true'] .menu-btn__bar--1 { transform: translateY(6px) rotate(45deg); }
+      .menu-btn[aria-expanded='true'] .menu-btn__bar--2 { opacity: 0; }
+      .menu-btn[aria-expanded='true'] .menu-btn__bar--3 { transform: translateY(-6px) rotate(-45deg); }
+
+      .site-menu {
+        position: fixed;
+        inset: 0;
+        z-index: 29;
+        padding-top: var(--masthead-h, 80px);
+        visibility: hidden;
+      }
+      .site-menu:not([data-state='closed']) { visibility: visible; }
+
+      .site-menu__ground {
+        /* The same dot screen as every other panel, through the shared hook. */
+        --halftone-ink: rgba(244, 233, 216, 0.07);
+        position: absolute;
+        inset: var(--masthead-h, 80px) 0 0 0;
+        background-color: var(--tin-panel);
+        background-image: radial-gradient(var(--halftone-ink) 1px, transparent 1.2px);
+        background-size: 6px 6px;
+      }
+
+      .site-menu__content {
+        position: relative;
+        height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        width: min(100% - var(--gutter) * 2, var(--page-max));
+        margin-inline: auto;
+        padding-block: var(--sp-5) calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
+      }
+
+      .site-menu__open {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-3);
+        font-size: var(--step--1);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .site-menu__burst {
+        position: relative;
+        flex: none;
+        width: 46px;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+      }
+      /* Scoped styles stop at a child component's markup, so the burst's own
+         svg is reached as a global descendant of an element this file owns. */
+      .site-menu__burst :global(svg) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .site-menu__burst b {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: 1.3rem;
+        line-height: 1;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .site-menu__open-text { display: grid; gap: 2px; }
+      .site-menu__open-qual {
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        color: var(--text-dim);
+      }
+      .site-menu__open-qual:empty { display: none; }
+
+      .site-menu__links {
+        list-style: none;
+        padding: 0;
+        margin: var(--sp-4) 0 var(--sp-6);
+      }
+      .site-menu__links li { position: relative; }
+      /* The rule under each link is drawn, so it can draw itself in. */
+      .site-menu__links li::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: rgba(244, 233, 216, 0.14);
+        transform-origin: left center;
+      }
+      /* Each link is its own mask: the word rises from behind the line. */
+      .site-menu__link {
+        display: block;
+        overflow: hidden;
+        padding: var(--sp-2) 0 calc(var(--sp-2) - 2px);
+        font-family: var(--font-display);
+        font-size: clamp(1.75rem, 1.2rem + 2.8vw, 2.75rem);
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .site-menu__ink { display: inline-block; }
+      .site-menu__link[aria-current='page'] .site-menu__ink {
+        text-decoration: underline;
+        text-decoration-color: var(--label-dim);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.18em;
+      }
+
+      .site-menu__call {
+        margin-top: auto;
+        display: block;
+        padding: var(--sp-4);
+        text-align: center;
+        font-size: var(--step--1);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--ink);
+        background: var(--spot-orange);
+        border: var(--keyline) solid var(--ink);
+        border-radius: var(--radius-control);
+        transition:
+          background-color var(--beat) var(--press),
+          transform var(--beat) var(--press);
+      }
+      .site-menu__call:hover { background: var(--spot-orange-lit); }
+      /* A tap needs to feel like it landed. */
+      .site-menu__call:active { transform: translateY(1px); background: var(--spot-orange-lit); }
+
+      /* Line reveal: the ground lands, each word rises out of its own line
+         and the rule beneath draws across. Closing is a single quick fade. */
+      .site-menu[data-state='open'] .site-menu__ground { animation: menu-fade-in 140ms linear both; }
+      .site-menu[data-state='open'] .site-menu__ink {
+        animation: menu-line-up 480ms var(--press) both;
+        animation-delay: calc(80ms + var(--i) * 45ms);
+      }
+      .site-menu[data-state='open'] .site-menu__links li::after {
+        animation: menu-rule-draw 560ms var(--press) both;
+        animation-delay: calc(120ms + var(--i) * 45ms);
+      }
+      .site-menu[data-state='open'] .site-menu__open {
+        animation: menu-rise 320ms var(--press) both;
+        animation-delay: 40ms;
+      }
+      .site-menu[data-state='open'] .site-menu__call {
+        animation: menu-rise 320ms var(--press) both;
+        animation-delay: 360ms;
+      }
+      .site-menu[data-state='closing'] { animation: menu-fade-out 200ms ease-in both; }
+
+      @keyframes menu-fade-in { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes menu-fade-out { from { opacity: 1; } to { opacity: 0; } }
+      @keyframes menu-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      @keyframes menu-line-up { from { transform: translateY(110%); } to { transform: none; } }
+      @keyframes menu-rule-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+      /* The links stop fitting beside the logo below 1010px (measured), so
+         from 1000px down the masthead becomes a pinned bar with the button. */
+      @media (max-width: 1000px) {
+        :global(html.js) {
+          scroll-padding-top: calc(var(--masthead-h, 80px) + var(--sp-3));
+        }
+        :global(html.menu-open) {
+          overflow: hidden;
+        }
+        :global(.js) .masthead {
+          position: sticky;
+          top: 0;
+          z-index: 30;
+        }
+        :global(.js) .masthead__inner {
+          flex-wrap: nowrap;
+          padding-block: var(--sp-3);
+        }
+        :global(.js) .masthead__mark {
+          width: clamp(76px, 10vw, 120px);
+        }
+        :global(.js) .masthead__nav {
+          display: none;
+        }
+        :global(.js) .menu-btn,
+        :global(.js) .site-menu {
+          display: block;
+        }
+      }
+
+      /* Without script the links stay visible, wrapped under a smaller mark. */
       @media (max-width: 640px) {
-        .masthead__inner {
+        :global(html:not(.js)) .masthead__inner {
           justify-content: center;
           gap: var(--sp-3);
           padding-block: var(--sp-3);
         }
-        .masthead__mark {
+        :global(html:not(.js)) .masthead__mark {
           width: 104px;
         }
-        .masthead__nav ul {
+        :global(html:not(.js)) .masthead__nav ul {
           justify-content: center;
           gap: var(--sp-1);
         }
-        .masthead__nav a {
+        :global(html:not(.js)) .masthead__nav a {
           padding: var(--sp-2) var(--sp-3);
           letter-spacing: 0.06em;
         }
       }
     </style>
+
+    <script>
+      import { statusFor } from '../lib/open-state';
+      import type { WeekHours } from '../data/locations';
+
+      type MenuHours = {
+        timeZone: string;
+        cafes: { slug: string; hours: WeekHours | null }[];
+      };
+
+      const root = document.documentElement;
+      const masthead = document.querySelector<HTMLElement>('.masthead');
+      const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+      const menu = document.querySelector<HTMLElement>('[data-site-menu]');
+      const dataEl = document.getElementById('cafe-hours');
+
+      if (masthead && button && menu && dataEl) {
+        const data = JSON.parse(dataEl.textContent ?? '{}') as MenuHours;
+        const countEl = menu.querySelector('[data-menu-open-count]');
+        const verbEl = menu.querySelector('[data-menu-open-verb]');
+        const qualEl = menu.querySelector('[data-menu-open-qual]');
+        const firstLink = menu.querySelector<HTMLAnchorElement>('.site-menu__link');
+        const compact = window.matchMedia('(max-width: 1000px)');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let closeTimer: number | undefined;
+
+        // The menu opens under the pinned masthead, so it needs the bar's real height.
+        const syncHeight = () => root.style.setProperty('--masthead-h', `${masthead.offsetHeight}px`);
+        new ResizeObserver(syncHeight).observe(masthead);
+        syncHeight();
+
+        // The same café-clock logic as the hours board, so both always agree.
+        const paintCount = () => {
+          const openNow = data.cafes.filter((c) => {
+            const state = statusFor(c.hours, data.timeZone).state;
+            return state === 'open' || state === 'closing-soon';
+          }).length;
+          const listed = data.cafes.filter((c) => c.hours).length;
+          if (countEl) countEl.textContent = String(openNow);
+          if (verbEl) verbEl.textContent = openNow === 1 ? 'location open now' : 'locations open now';
+          if (qualEl) qualEl.textContent = listed === data.cafes.length ? '' : `of ${listed} listed`;
+        };
+
+        // Everything behind the menu goes inert while it is open.
+        const behind = () => [
+          document.querySelector('main'),
+          document.querySelector('footer'),
+          document.querySelector('.skip-link'),
+        ];
+
+        const settleClosed = () => {
+          window.clearTimeout(closeTimer);
+          menu.dataset.state = 'closed';
+          button.setAttribute('aria-expanded', 'false');
+          root.classList.remove('menu-open');
+          behind().forEach((el) => el?.removeAttribute('inert'));
+        };
+
+        const open = () => {
+          window.clearTimeout(closeTimer);
+          paintCount();
+          menu.dataset.state = 'open';
+          button.setAttribute('aria-expanded', 'true');
+          root.classList.add('menu-open');
+          behind().forEach((el) => el?.setAttribute('inert', ''));
+          firstLink?.focus({ preventScroll: true });
+        };
+
+        const close = ({ restoreFocus = true } = {}) => {
+          if (menu.dataset.state !== 'open') return;
+          menu.dataset.state = 'closing';
+          button.setAttribute('aria-expanded', 'false');
+          root.classList.remove('menu-open');
+          behind().forEach((el) => el?.removeAttribute('inert'));
+          if (restoreFocus) button.focus({ preventScroll: true });
+          closeTimer = window.setTimeout(settleClosed, reduceMotion.matches ? 0 : 200);
+        };
+
+        button.addEventListener('click', () => (menu.dataset.state === 'open' ? close() : open()));
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && menu.dataset.state === 'open') close();
+        });
+
+        // Widening past the breakpoint swaps back to the desktop links.
+        compact.addEventListener('change', (e) => {
+          if (!e.matches) settleClosed();
+        });
+
+        // The Back button can restore this page from cache with the menu still open.
+        window.addEventListener('pageshow', (e) => {
+          if (e.persisted) settleClosed();
+        });
+
+        paintCount();
+      }
+    </script>
   </body>
 </html>

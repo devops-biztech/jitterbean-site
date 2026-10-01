@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-16T00:00:00.000Z",
+  "generatedAt": "2026-10-01T00:00:00.000Z",
   "title": "Design System: Jitter Bean Coffee Co.",
   "extensions": {
     "colorMeta": {
@@ -441,6 +441,21 @@
         "name": "stamp",
         "value": "@keyframes stamp { from { transform: scale(1.5) rotate(-7deg); opacity: 0 } to { transform: scale(1) rotate(0deg); opacity: 1 } }",
         "purpose": "The one authored moment: the status flash lands once per flash, suppressed under prefers-reduced-motion."
+      },
+      {
+        "name": "line-reveal-word",
+        "value": "@keyframes menu-line-up { from { transform: translateY(110%) } to { transform: none } } 480ms var(--press), delay calc(80ms + var(--i) * 45ms)",
+        "purpose": "Site menu only: each link's word rises out of its own overflow-hidden line."
+      },
+      {
+        "name": "line-reveal-rule",
+        "value": "@keyframes menu-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } 560ms var(--press), origin left, delay calc(120ms + var(--i) * 45ms)",
+        "purpose": "Site menu only: the hairline under each link draws in from the left."
+      },
+      {
+        "name": "menu-ground",
+        "value": "fade in 140ms linear; rise 8px over 320ms on --press (count at 40ms, call at 360ms); close as one 200ms ease-in fade",
+        "purpose": "Site menu only: the ground lands, the count and call settle, and closing is a single quick fade. Collapsed by the global reduced-motion rule."
       }
     ],
     "breakpoints": [
@@ -455,6 +470,10 @@
       {
         "name": "one-column",
         "value": "900px"
+      },
+      {
+        "name": "pinned-masthead",
+        "value": "1000px"
       },
       {
         "name": "board-swap",
@@ -498,6 +517,14 @@
       "description": "Uppercase Archivo links on the tin; the current page reads as a struck label plate.",
       "html": "<nav class=\"ds-nav\"><ul><li><a href=\"#\" aria-current=\"page\">Locations</a></li><li><a href=\"#\">Menu</a></li><li><a href=\"#\">Wholesale</a></li></ul></nav>",
       "css": ".ds-nav { background: var(--tin-field, #2a2725); border-bottom: 2px solid var(--ink, #1c1a18); padding: 1rem; } .ds-nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 0; } .ds-nav a { display: block; padding: 0.5rem 0.75rem; font-family: var(--font-text, Archivo, sans-serif); font-size: var(--step--1, 0.85rem); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--text-dim, #b3a894); border: 1px solid transparent; border-radius: var(--radius-control, 5px); transition: color 260ms cubic-bezier(0.16,0.84,0.3,1), border-color 260ms cubic-bezier(0.16,0.84,0.3,1); } .ds-nav a:hover { color: var(--text, #f4e9d8); border-color: var(--text-faint, #afa89d); } .ds-nav a[aria-current='page'] { color: var(--ink, #1c1a18); background: var(--label, #f4e9d8); border-color: var(--ink, #1c1a18); box-shadow: inset 0 0 0 1px rgba(28,26,24,0.35); } .ds-nav a:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; }"
+    },
+    {
+      "name": "Site Menu",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Below 1000px: the pinned bar's menu button opens a full-screen tin-panel menu with a live open count, six Bevan links over drawn hairlines, and a full-width orange call; opens with the line reveal.",
+      "html": "<div class=\"ds-sm\"><div class=\"ds-sm-bar\"><span class=\"ds-sm-mark\">JITTER BEAN</span><button class=\"ds-sm-btn\" type=\"button\" aria-label=\"Menu\" aria-expanded=\"true\"><span class=\"ds-sm-b ds-sm-b1\"></span><span class=\"ds-sm-b ds-sm-b2\"></span><span class=\"ds-sm-b ds-sm-b3\"></span></button></div><nav class=\"ds-sm-panel\" aria-label=\"Main\"><a class=\"ds-sm-open\" href=\"#\"><span class=\"ds-sm-burst\"><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\"><path d=\"M50.00 0.00 L55.18 7.31 L61.97 1.45 L65.25 9.79 L73.24 5.73 L74.43 14.61 L83.16 12.57 L82.19 21.49 L91.15 21.60 L88.07 30.02 L96.75 32.27 L91.75 39.71 L99.64 43.97 L93.00 50.00 L99.64 56.03 L91.75 60.29 L96.75 67.73 L88.07 69.98 L91.15 78.40 L82.19 78.51 L83.16 87.43 L74.43 85.39 L73.24 94.27 L65.25 90.21 L61.97 98.55 L55.18 92.69 L50.00 100.00 L44.82 92.69 L38.03 98.55 L34.75 90.21 L26.76 94.27 L25.57 85.39 L16.84 87.43 L17.81 78.51 L8.85 78.40 L11.93 69.98 L3.25 67.73 L8.25 60.29 L0.36 56.03 L7.00 50.00 L0.36 43.97 L8.25 39.71 L3.25 32.27 L11.93 30.02 L8.85 21.60 L17.81 21.49 L16.84 12.57 L25.57 14.61 L26.76 5.73 L34.75 9.79 L38.03 1.45 L44.82 7.31 Z\" fill=\"var(--spot-orange, #f07838)\"/></svg><b>4</b></span><span>locations open now</span></a><ul class=\"ds-sm-links\"><li style=\"--i:0\"><a class=\"ds-sm-link\" href=\"#\" aria-current=\"page\"><span class=\"ds-sm-ink\">Locations</span></a></li><li style=\"--i:1\"><a class=\"ds-sm-link\" href=\"#\"><span class=\"ds-sm-ink\">Menu</span></a></li><li style=\"--i:2\"><a class=\"ds-sm-link\" href=\"#\"><span class=\"ds-sm-ink\">Programs</span></a></li><li style=\"--i:3\"><a class=\"ds-sm-link\" href=\"#\"><span class=\"ds-sm-ink\">Wholesale</span></a></li><li style=\"--i:4\"><a class=\"ds-sm-link\" href=\"#\"><span class=\"ds-sm-ink\">About</span></a></li><li style=\"--i:5\"><a class=\"ds-sm-link\" href=\"#\"><span class=\"ds-sm-ink\">Contact</span></a></li></ul><a class=\"ds-sm-call\" href=\"#\">Call (555) 010-0199</a></nav></div>",
+      "css": ".ds-sm { background: var(--tin-field, #2a2725); color: var(--text, #f4e9d8); font-family: var(--font-text, Archivo, sans-serif); max-width: 420px; } .ds-sm-bar { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-bottom: 2px solid var(--ink, #1c1a18); } .ds-sm-mark { font-family: var(--font-display, Bevan, Georgia, serif); font-size: 1.1rem; } .ds-sm-btn { position: relative; width: 44px; height: 44px; border: 0; border-radius: var(--radius-control, 5px); background: none; color: inherit; cursor: pointer; } .ds-sm-btn:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; } .ds-sm-b { position: absolute; left: 11px; width: 22px; height: 2.5px; background: currentColor; transition: transform 260ms cubic-bezier(0.16,0.84,0.3,1), opacity 140ms linear; } .ds-sm-b1 { top: 15px; } .ds-sm-b2 { top: 21px; } .ds-sm-b3 { top: 27px; } .ds-sm-btn[aria-expanded='true'] .ds-sm-b1 { transform: translateY(6px) rotate(45deg); } .ds-sm-btn[aria-expanded='true'] .ds-sm-b2 { opacity: 0; } .ds-sm-btn[aria-expanded='true'] .ds-sm-b3 { transform: translateY(-6px) rotate(-45deg); } .ds-sm-panel { display: flex; flex-direction: column; padding: 1.5rem 1rem 2rem; background-color: var(--tin-panel, #383838); background-image: radial-gradient(rgba(244,233,216,0.07) 1px, transparent 1.2px); background-size: 6px 6px; animation: ds-sm-fade 140ms linear both; } .ds-sm-open { align-self: flex-start; display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: inherit; text-decoration: none; animation: ds-sm-rise 320ms cubic-bezier(0.16,0.84,0.3,1) 40ms both; } .ds-sm-burst { position: relative; width: 46px; aspect-ratio: 1; display: grid; place-items: center; } .ds-sm-burst svg { position: absolute; inset: 0; width: 100%; height: 100%; } .ds-sm-burst b { position: relative; font-family: var(--font-display, Bevan, Georgia, serif); font-weight: 400; font-size: 1.3rem; line-height: 1; color: var(--ink, #1c1a18); font-variant-numeric: tabular-nums; } .ds-sm-links { list-style: none; padding: 0; margin: 1rem 0 2rem; } .ds-sm-links li { position: relative; } .ds-sm-links li::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(244,233,216,0.14); transform-origin: left center; animation: ds-sm-rule 560ms cubic-bezier(0.16,0.84,0.3,1) both; animation-delay: calc(120ms + var(--i) * 45ms); } .ds-sm-link { display: block; overflow: hidden; padding: 0.5rem 0 calc(0.5rem - 2px); font-family: var(--font-display, Bevan, Georgia, serif); font-size: clamp(1.75rem, 1.2rem + 2.8vw, 2.75rem); line-height: 1.05; letter-spacing: -0.01em; color: inherit; text-decoration: none; } .ds-sm-link:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; border-radius: 2px; } .ds-sm-ink { display: inline-block; animation: ds-sm-up 480ms cubic-bezier(0.16,0.84,0.3,1) both; animation-delay: calc(80ms + var(--i) * 45ms); } .ds-sm-link[aria-current='page'] .ds-sm-ink { text-decoration: underline; text-decoration-color: var(--label-dim, #d6c9b2); text-decoration-thickness: 2px; text-underline-offset: 0.18em; } .ds-sm-call { display: block; padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; color: var(--ink, #1c1a18); background: var(--spot-orange, #f07838); border: 2px solid var(--ink, #1c1a18); border-radius: var(--radius-control, 5px); animation: ds-sm-rise 320ms cubic-bezier(0.16,0.84,0.3,1) 360ms both; } .ds-sm-call:focus-visible, .ds-sm-open:focus-visible { outline: 3px solid var(--spot-orange, #f07838); outline-offset: 3px; } @keyframes ds-sm-fade { from { opacity: 0; } to { opacity: 1; } } @keyframes ds-sm-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } } @keyframes ds-sm-up { from { transform: translateY(110%); } to { transform: none; } } @keyframes ds-sm-rule { from { transform: scaleX(0); } to { transform: scaleX(1); } } @media (prefers-reduced-motion: reduce) { .ds-sm *, .ds-sm *::after, .ds-sm-panel { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }"
     },
     {
       "name": "Label Band",
@@ -612,7 +639,7 @@
       },
       {
         "name": "The Printed-Matter Motion Rule",
-        "body": "Everything moves in one beat: --beat 260ms (--beat-slow 460ms where a longer move is needed) on --press cubic-bezier(0.16, 0.84, 0.3, 1). Transitions carry colour and border only. The one authored moment in the whole system is the stamp: the status flash lands from scale(1.5) rotate(-7deg) at zero opacity to rest, fired once per flash on landing and never replayed, and fully suppressed under prefers-reduced-motion, where the flash is simply present. No parallax, no scroll reveals, no easing theatrics.",
+        "body": "Everything moves in one beat: --beat 260ms (--beat-slow 460ms where a longer move is needed) on --press cubic-bezier(0.16, 0.84, 0.3, 1). Transitions carry colour and border only. The one authored moment in the whole system is the stamp: the status flash lands from scale(1.5) rotate(-7deg) at zero opacity to rest, fired once per flash on landing and never replayed, and fully suppressed under prefers-reduced-motion, where the flash is simply present. No parallax, no scroll reveals, no easing theatrics. The system's one other authored moment is the site menu's line reveal (see Components): chosen by the user over more decorative candidates, it is held to the same restraint and stays inside the menu.",
         "section": "elevation"
       },
       {
@@ -639,6 +666,31 @@
         "name": "The Drawn Marker Rule",
         "body": "Icons and markers are inline SVG with a 2px currentColor stroke, never a text character. The disclosure marker is two drawn strokes in a keylined box, the vertical one collapsing via scaleY(0) on [open], so the stroke weight is the system's and does not shift with the font.",
         "section": "components"
+      },
+      {
+        "name": "The Pinned Bar Rule",
+        "body": "At 1000px and below (with script) the masthead is position: sticky; top: 0 at z-index: 30, its mark at clamp(76px, 10vw, 120px) and sp-3 block padding, so the menu button stays reachable on long pages. Its measured height is published as --masthead-h (kept live by a ResizeObserver, 80px fallback) and is the only source for anything that sits under the bar: the site menu's top offset and scroll-padding-top (--masthead-h + sp-3), so anchor targets clear it. Never hardcode the bar's height. Above 1000px the masthead is not sticky and sits at z-index: 0.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hero Clearance Trade-off",
+        "body": "On desktop the homepage mascot reaches up out of the tin band and overlaps the masthead, which the masthead's z-index: 0 allows. At 1000px and below the pinned bar has to sit above page content, so the band adds 44px to its top padding and the mascot clears the bar instead. It still breaks the band's own keyline at every width. This is a deliberate responsive difference, not a regression: overlap the chrome only where the chrome does not pin.",
+        "section": "layout"
+      },
+      {
+        "name": "The Line Reveal Rule",
+        "body": "Opening: the ground fades in over 140ms (linear). Each link is its own overflow: hidden mask and its word rises from translateY(110%) over 480ms on --press, staggered 80ms + i × 45ms; the hairline under it draws scaleX(0 → 1) from the left over 560ms on --press, staggered 120ms + i × 45ms. The count (40ms delay) and the call button (360ms) rise 8px into place over 320ms. Closing is one 200ms ease-in fade of the whole panel. Nothing bounces, scales or rotates; the words rise out of their own lines and the rules print under them. The user picked this from a set of mockups and rejected the more decorative candidates as cheesy — the restraint is the intent. Under prefers-reduced-motion the global rule collapses every animation and the close timer drops to 0.",
+        "section": "components"
+      },
+      {
+        "name": "The Progressive Menu Rule",
+        "body": "An inline head script adds .js to <html>, and every compact-masthead and menu style is gated on it; without script the plain links stay. While open, main, the footer and the skip link are inert and page scroll is locked. Focus moves to the first link on open and back to the button on close; Escape closes; widening past 1000px closes it; a pageshow with persisted resets it, so the Back button never restores a stuck-open menu.",
+        "section": "components"
+      },
+      {
+        "name": "The One Clock Rule",
+        "body": "The open count uses statusFor from src/lib/open-state.ts (open and closing-soon both count as open), fed by a #cafe-hours JSON script the layout emits from the locations data. New open/closed readers import that function. The hours board still carries its own inline copy of the logic; that is a known duplication, not a pattern to follow.",
+        "section": "components"
       }
     ],
     "dos": [
@@ -648,7 +700,9 @@
       "Do spend orange on live state, the mascot, focus and one loud call per section; spend red on CLOSING SOON and errors only.",
       "Do pick the orange by its ground: spot-orange for text on the tin field, spot-orange-ink for text on a tin panel.",
       "Do set every time and count in tabular figures.",
-      "Do keep motion to one 260ms beat on cubic-bezier(0.16, 0.84, 0.3, 1), and keep the stamp as the only authored moment.",
+      "Do keep motion to one 260ms beat on cubic-bezier(0.16, 0.84, 0.3, 1), and keep the stamp and the site menu's line reveal as the only two authored moments.",
+      "Do offset anything under the pinned masthead from --masthead-h, never from a guessed height.",
+      "Do build script-dependent chrome so the page still works without it: gate on html.js, and leave the plain links visible otherwise.",
       "Do encode roast depth with the ramp via color-mix, so the colour carries data.",
       "Do reach a child component's SVG with :global(svg) from an element you own, and give it an explicit box.",
       "Do render missing data as visibly absent, in on-label-faint.",
@@ -666,7 +720,8 @@
       "Don't use a neutral grey for secondary text. Tint from the stock.",
       "Don't add a third typeface, or set Bevan below --step-1.",
       "Don't replace the computed starburst with a decorative polygon or an image.",
-      "Don't add parallax, scroll reveals, staggered entrances or a second easing curve.",
+      "Don't add parallax, scroll reveals, staggered entrances or a second easing curve to page content. The line reveal is the one stagger, and it stays inside the menu.",
+      "Don't write another copy of the open/closed logic. Import statusFor from src/lib/open-state.ts.",
       "Don't ship a kicker or eyebrow above a heading — the Stamp is a struck corner mark, not a kicker, and the system has no eyebrow.",
       "Don't use a hard offset shadow. Depth here is offset plus blur in near-black."
     ]
