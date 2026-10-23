@@ -51,7 +51,8 @@ const week = (weekday: DayHours, sat: DayHours, sun: DayHours): WeekHours => [
 ];
 
 /*
-  All six cafés confirmed by the client. Their figures superseded the incumbent
+  All six cafés confirmed by the client; hours last revised by the client on
+  2026-10-22, before launch. Their figures superseded the incumbent
   site entirely: the old locations page carried a hidden gallery whose entries
   disagreed both with the visible page and with each other (Harris appeared as
   "Mon–Sat 5:30am–6pm", 5th Street as both "6am–5:30pm" and "6am–6pm"). None of
@@ -69,7 +70,7 @@ export const locations: Location[] = [
     address: '900 G St.',
     zip: '95521',
     phone: null,
-    hours: week(h('06:30', '17:00'), h('07:00', '17:00'), h('07:00', '16:00')),
+    hours: week(h('06:30', '16:00'), h('07:00', '16:00'), h('07:00', '16:00')),
     verified: true,
     photo: photoPlaza,
   },
@@ -80,7 +81,7 @@ export const locations: Location[] = [
     address: "5000 Valley West Blvd. 'Pad #1'",
     zip: '95521',
     phone: null,
-    hours: week(h('06:00', '17:00'), h('06:30', '16:00'), h('06:30', '16:00')),
+    hours: week(h('06:00', '16:30'), h('06:30', '16:00'), h('06:30', '16:00')),
     verified: true,
     photo: photoValleyWest,
   },
@@ -91,7 +92,7 @@ export const locations: Location[] = [
     address: '1225 Broadway St.',
     zip: '95501',
     phone: null,
-    hours: week(h('06:00', '17:30'), h('06:00', '17:00'), h('06:30', '16:00')),
+    hours: week(h('06:00', '16:30'), h('07:00', '16:30'), h('07:00', '16:00')),
     verified: true,
     photo: photoBroadway,
   },
@@ -102,7 +103,7 @@ export const locations: Location[] = [
     address: '1836 5th St.',
     zip: '95501',
     phone: null,
-    hours: week(h('06:00', '17:30'), h('06:30', '17:00'), h('06:30', '16:00')),
+    hours: week(h('06:00', '17:00'), h('07:00', '16:30'), h('07:00', '16:00')),
     verified: true,
     photo: photoFifthStreet,
   },
@@ -129,7 +130,7 @@ export const locations: Location[] = [
     address: '466 North Fortuna Blvd.',
     zip: '95540',
     phone: null,
-    hours: week(h('06:30', '16:30'), h('07:00', '16:00'), h('07:00', '16:00')),
+    hours: week(h('06:30', '16:00'), h('07:00', '16:00'), h('07:00', '16:00')),
     verified: true,
     photo: photoFortuna,
   },

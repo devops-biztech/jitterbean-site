@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title="Page not found — Jitter Bean Coffee Co."
+  description="That page isn't here. Find a Jitter Bean location, the menu, or a way to reach us."
+>
+  <header class="page masthead-block">
+    <h1>That page isn't here.</h1>
+  </header>
+
+  <section class="page section lost">
+    <p class="prose">
+      It may have moved when the site was rebuilt. Most people are looking for one of these:
+    </p>
+    <ul class="lost__links">
+      <li><a class="btn btn--loud" href="/locations">Locations &amp; hours</a></li>
+      <li><a class="btn" href="/menu">Menu</a></li>
+      <li><a class="btn" href={`tel:${site.phoneHref}`}>Call {site.phone}</a></li>
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .masthead-block {
+    padding-top: var(--sp-8);
+  }
+
+  .masthead-block h1 {
+    font-size: var(--step-5);
+    max-width: 14ch;
+  }
+
+  .section {
+    margin-top: var(--sp-8);
+  }
+
+  .lost {
+    max-width: 60ch;
+  }
+
+  .lost__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-5);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--sp-3) var(--sp-5);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    border-radius: var(--radius-control);
+    border: var(--keyline) solid var(--ink);
+  }
+
+  .btn--loud {
+    background: var(--spot-orange);
+    color: var(--ink);
+    transition: background-color var(--beat) var(--press);
+  }
+
+  .btn--loud:hover {
+    background: var(--spot-orange-lit);
+  }
+</style>

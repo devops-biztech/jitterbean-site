@@ -53,6 +53,25 @@ To add a café's hours, fill in `address`, `zip` and `hours`. Setting `verified:
 
 **2. The menu is text.** The old menu was two flat 2MB PNGs with no text layer — unreadable to search engines, screen readers, and anyone on a phone. It is now structured content. Prices are modelled but empty: add a `price` to any item and it renders, with no redesign needed.
 
+## Launch: moving the domain off Wix
+
+DNS for jitterbeancoffee.com is hosted at Name.com (its own nameservers), so nothing moves registrar or nameservers. Only two records point at Wix:
+
+| Record | Now (Wix) | Change to |
+|---|---|---|
+| `A` `@` | `23.236.62.147` | the A value Vercel shows for the apex |
+| `CNAME` `www` | `…wixdns.net` | the CNAME value Vercel shows for `www` |
+
+1. In Vercel, add `www.jitterbeancoffee.com` as the primary domain and `jitterbeancoffee.com` redirecting to it. `site` in `astro.config.mjs` is the `www` host, so canonicals, sitemap and structured data all agree with that.
+2. Set the three environment variables above in the Vercel project, then redeploy.
+3. At Name.com, change only the two records above. **Leave everything else alone**: email is Microsoft 365 (`MX`, the SPF `TXT`, `autodiscover`, `_dmarc`), and the `google-site-verification` `TXT` keeps Search Console ownership.
+4. Once Vercel shows both domains valid, submit `https://www.jitterbeancoffee.com/sitemap-index.xml` in Search Console.
+5. Keep the Wix plan until the new site has served for a few days, then cancel it.
+
+The Wix site's indexed URLs that have no page here (`/shop`, `/product-page/*`, `/book-online`, `/service-page/*`, `/blank`) 301 to their nearest page; see `redirects` in `astro.config.mjs`. Every other unknown path gets the 404 page.
+
+The wholesale form sends through Resend, so `WHOLESALE_FROM` needs a domain verified in Resend, which means adding Resend's DNS records at Name.com too. The domain's DMARC policy is `p=quarantine`, so mail from an unverified sender will land in spam or not at all.
+
 ## Still blocked on the client
 
 - **A vector logo.** The current mark is raster.
