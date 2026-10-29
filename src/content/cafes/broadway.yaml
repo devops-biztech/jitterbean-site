@@ -1,0 +1,44 @@
+name: Broadway
+position: 3
+city: Eureka
+address: 1225 Broadway St.
+zip: '95501'
+photo: ../../assets/img/cafes/broadway/photo.jpg
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    tuesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    wednesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    thursday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    friday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    saturday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:30'
+    sunday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'

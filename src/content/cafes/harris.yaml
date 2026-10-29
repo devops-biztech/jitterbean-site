@@ -1,0 +1,46 @@
+name: Harris
+position: 5
+city: Eureka
+address: 3101 Montgomery St.
+zip: '95503'
+locating: Corner of Harris & Montgomery
+photo: ../../assets/img/cafes/harris/photo.jpg
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:30'
+    tuesday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:30'
+    wednesday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:30'
+    thursday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:30'
+    friday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:30'
+    saturday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '17:00'
+    sunday:
+      discriminant: true
+      value:
+        open: '05:30'
+        close: '16:00'
+notes: 'ZIP corrected to 95503 with the client: Montgomery St is in the Myrtletown area of Eureka, and county property records plus every public listing agree. The client originally supplied 95501. The locating line is verified, not assumed: geocoded to 40.7802145,-124.1385639, and an OpenStreetMap query shows the only two named streets within 35m are Montgomery Street and Harris Street, so the cafe is on that corner. A cafe-specific number, (707) 442-2504, appears in public listings if per-cafe numbers are ever wanted.'

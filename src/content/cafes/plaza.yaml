@@ -1,0 +1,44 @@
+name: Plaza
+position: 1
+city: Arcata
+address: 900 G St.
+zip: '95521'
+photo: ../../assets/img/cafes/plaza/photo.jpg
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    tuesday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    wednesday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    thursday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    friday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    saturday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'
+    sunday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'

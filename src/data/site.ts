@@ -1,9 +1,3 @@
-import type { ImageMetadata } from 'astro';
-import bagEspresso from '../assets/img/bag-espresso.png';
-import bagFrench from '../assets/img/bag-french.png';
-import bagHouse from '../assets/img/bag-house.png';
-import bagSumatra from '../assets/img/bag-sumatra.png';
-
 export const site = {
   name: 'Jitter Bean Coffee Co.',
   shortName: 'Jitter Bean',
@@ -34,21 +28,6 @@ export const mission =
 
 export const sourcing =
   'Brewing coffee isn’t just about what you sip. It’s an ever-evolving process that many have failed to perfect. The key is knowing where it all starts and understanding where it comes from. Our coffee is globally sourced from nutrient-rich lands cultivated by those who have mastered the growing process. These regions — made up of a perfect blend of rain, sunshine and healthy soil — are the only places to find such delicious perfection.';
-
-export type Roast = {
-  name: string;
-  level: string;
-  /** 0–1, light to dark. Drives the roast-level swatch. */
-  depth: number;
-  bag: ImageMetadata;
-};
-
-export const roasts: Roast[] = [
-  { name: 'House', level: 'Medium Roast', depth: 0.42, bag: bagHouse },
-  { name: 'Sumatra', level: 'Medium/Dark Roast', depth: 0.64, bag: bagSumatra },
-  { name: 'Espresso', level: 'Dark Roast', depth: 0.82, bag: bagEspresso },
-  { name: 'French', level: 'Dark Roast', depth: 0.95, bag: bagFrench },
-];
 
 export const nav = [
   { href: '/', label: 'Home' },

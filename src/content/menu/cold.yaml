@@ -1,0 +1,62 @@
+name: Cold Drinks
+position: 2
+sections:
+  - name: Explosions
+    sizes: 16oz
+    note: Blended with premium ice cream.
+    items:
+      - name: Mocha Explosion
+      - name: White Mocha Explosion
+      - name: Latte Explosion
+      - name: Caramel Explosion
+      - name: Chai Explosion
+      - name: Jet Explosion
+        size: 20oz
+        note: Made with Red Bull
+        signature: true
+  - name: Milkshakes
+    sizes: 16oz
+    items:
+      - name: Vanilla Milkshake
+      - name: Chai Milkshake
+      - name: JB Special
+      - name: Blustery Bean
+        signature: true
+  - name: '''TNT'' Fruit Smoothie'
+    note: Seasonal flavors may be available.
+    items:
+      - name: Wild Berry
+      - name: Strawberry
+      - name: Mango
+  - name: Cold Beverages
+    sizes: 16oz
+    items:
+      - name: Cold Brew
+      - name: Italian Soda
+      - name: Cremosa
+      - name: Iced Tea
+      - name: Lemon Tea
+      - name: Bottled Water
+        size: 20oz
+      - name: Red Bull
+      - name: Ice "JET"
+        note: Red Bull with flavor
+  - name: Kids Beverages
+    items:
+      - name: Hot Chocolate
+        size: 8oz
+      - name: Apple Juice
+        size: 10.5oz
+      - name: Steamer
+        size: 8oz
+      - name: Italian Soda
+        size: 10.5oz
+      - name: Cremosa
+        size: 10.5oz
+      - name: '"TNT" Fruit Smoothie'
+        size: 10.5oz
+      - name: Little Bean Shake
+        size: 10.5oz
+        signature: true
+      - name: Milk
+        size: 10.5oz

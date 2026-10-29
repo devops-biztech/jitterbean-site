@@ -1,0 +1,44 @@
+name: Fortuna
+position: 6
+city: Fortuna
+address: 466 North Fortuna Blvd.
+zip: '95540'
+photo: ../../assets/img/cafes/fortuna/photo.jpg
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    tuesday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    wednesday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    thursday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    friday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    saturday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'
+    sunday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'

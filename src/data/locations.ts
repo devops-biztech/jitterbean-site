@@ -1,10 +1,5 @@
 import type { ImageMetadata } from 'astro';
-import photoPlaza from '../assets/img/cafe-plaza.jpg';
-import photoBroadway from '../assets/img/cafe-broadway.jpg';
-import photoValleyWest from '../assets/img/cafe-valley-west.jpg';
-import photoFifthStreet from '../assets/img/cafe-fifth-street.png';
-import photoHarris from '../assets/img/cafe-harris.jpg';
-import photoFortuna from '../assets/img/cafe-fortuna.jpg';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 /** "HH:MM" in 24h, America/Los_Angeles. */
 export type Time = `${number}${number}:${number}${number}`;
@@ -18,123 +13,50 @@ export type Location = {
   /** The name locals use — this is how people pick between six. */
   name: string;
   city: string;
-  address: string | null;
-  zip: string | null;
-  phone: string | null;
+  address: string;
+  zip: string;
+  /** Null until the client turns hours on, e.g. for a café not yet open. */
   hours: WeekHours | null;
-  /**
-   * Confirmed by the client. Only verified cafés are published into
-   * schema.org, because wrong hours in a search result are worse than none.
-   */
-  verified: boolean;
   /**
    * A locating line shown under the name — a cross street or landmark, for a
    * café whose common name is not its street. Client-supplied only.
    */
   locating?: string;
-  photo: ImageMetadata | null;
-  /** Shown to the client during review, never rendered to visitors. */
-  internalNote?: string;
+  photo: ImageMetadata;
 };
 
-const h = (o: Time, c: Time): DayHours => ({ open: o, close: c });
-
-/** Builds a week from weekday / Saturday / Sunday, the way the client states them. */
-const week = (weekday: DayHours, sat: DayHours, sun: DayHours): WeekHours => [
-  sun,
-  weekday,
-  weekday,
-  weekday,
-  weekday,
-  weekday,
-  sat,
-];
-
 /*
-  All six cafés confirmed by the client; hours last revised by the client on
-  2026-10-22, before launch. Their figures superseded the incumbent
-  site entirely: the old locations page carried a hidden gallery whose entries
-  disagreed both with the visible page and with each other (Harris appeared as
-  "Mon–Sat 5:30am–6pm", 5th Street as both "6am–5:30pm" and "6am–6pm"). None of
-  that stale data survives here.
-
-  Photo-to-café mapping was recovered from that same gallery, which paired each
-  media id with a title and the original filename, so the assignments below are
-  confirmed rather than inferred.
+  The cafés live in src/content/cafes, one YAML file each, edited by the
+  client through Keystatic at /keystatic. Whatever is there is client-entered,
+  so it is published as-is; a café without hours renders as visibly pending.
 */
-export const locations: Location[] = [
-  {
-    slug: 'plaza',
-    name: 'Plaza',
-    city: 'Arcata',
-    address: '900 G St.',
-    zip: '95521',
-    phone: null,
-    hours: week(h('06:30', '16:00'), h('07:00', '16:00'), h('07:00', '16:00')),
-    verified: true,
-    photo: photoPlaza,
-  },
-  {
-    slug: 'valley-west',
-    name: 'Valley West',
-    city: 'Arcata',
-    address: "5000 Valley West Blvd. 'Pad #1'",
-    zip: '95521',
-    phone: null,
-    hours: week(h('06:00', '16:30'), h('06:30', '16:00'), h('06:30', '16:00')),
-    verified: true,
-    photo: photoValleyWest,
-  },
-  {
-    slug: 'broadway',
-    name: 'Broadway',
-    city: 'Eureka',
-    address: '1225 Broadway St.',
-    zip: '95501',
-    phone: null,
-    hours: week(h('06:00', '16:30'), h('07:00', '16:30'), h('07:00', '16:00')),
-    verified: true,
-    photo: photoBroadway,
-  },
-  {
-    slug: 'fifth-street',
-    name: '5th Street',
-    city: 'Eureka',
-    address: '1836 5th St.',
-    zip: '95501',
-    phone: null,
-    hours: week(h('06:00', '17:00'), h('07:00', '16:30'), h('07:00', '16:00')),
-    verified: true,
-    photo: photoFifthStreet,
-  },
-  {
-    slug: 'harris',
-    name: 'Harris',
-    city: 'Eureka',
-    address: '3101 Montgomery St.',
-    zip: '95503',
-    phone: null,
-    // Opens earliest of the six.
-    hours: week(h('05:30', '17:30'), h('05:30', '17:00'), h('05:30', '16:00')),
-    verified: true,
-    // Named for the street it fronts, addressed on the one it sits at the corner of.
-    locating: 'Corner of Harris & Montgomery',
-    photo: photoHarris,
-    internalNote:
-      'ZIP corrected to 95503 with the client: Montgomery St is in the Myrtletown area of Eureka, and county property records plus every public listing agree. The client originally supplied 95501. The locating line is verified, not assumed: geocoded to 40.7802145,-124.1385639, and an OpenStreetMap query shows the only two named streets within 35m are Montgomery Street and Harris Street, so the cafe is on that corner. A cafe-specific number, (707) 442-2504, appears in public listings if per-cafe numbers are ever wanted.',
-  },
-  {
-    slug: 'fortuna',
-    name: 'Fortuna',
-    city: 'Fortuna',
-    address: '466 North Fortuna Blvd.',
-    zip: '95540',
-    phone: null,
-    hours: week(h('06:30', '16:00'), h('07:00', '16:00'), h('07:00', '16:00')),
-    verified: true,
-    photo: photoFortuna,
-  },
+type Week = Extract<CollectionEntry<'cafes'>['data']['hours'], { discriminant: true }>['value'];
+
+const toDay = (d: Week[keyof Week]): DayHours =>
+  d.discriminant ? { open: d.value.open as Time, close: d.value.close as Time } : null;
+
+const toWeek = (w: Week): WeekHours => [
+  toDay(w.sunday),
+  toDay(w.monday),
+  toDay(w.tuesday),
+  toDay(w.wednesday),
+  toDay(w.thursday),
+  toDay(w.friday),
+  toDay(w.saturday),
 ];
+
+export const locations: Location[] = (await getCollection('cafes'))
+  .sort((a, b) => a.data.position - b.data.position || a.data.name.localeCompare(b.data.name))
+  .map(({ id, data }) => ({
+    slug: id,
+    name: data.name,
+    city: data.city,
+    address: data.address,
+    zip: data.zip,
+    hours: data.hours.discriminant ? toWeek(data.hours.value) : null,
+    locating: data.locating,
+    photo: data.photo,
+  }));
 
 export const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
 export const DAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
