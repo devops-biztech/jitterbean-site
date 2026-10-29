@@ -95,9 +95,8 @@ The wholesale form sends through Resend, so `WHOLESALE_FROM` needs a domain veri
 ## Still blocked on the client
 
 - **A vector logo.** The current mark is raster.
-- **The Clover gift card URL**, which currently points at clover.com generically.
 - **Per-café phone numbers**, if the client wants them. Every café currently routes to the office number.
 
-Resolved and no longer blocking: all six addresses and hour sets are client-confirmed, so every café publishes `openingHoursSpecification` and `alternateName` to search engines. Café-to-photo mapping was recovered from the old site's gallery data and is confirmed rather than guessed. The phone number is confirmed as (707) 476-9393. Harris's ZIP was corrected to 95503 — Montgomery St is in Myrtletown, and the 95501 originally supplied would have published a wrong postal code.
+Resolved and no longer blocking: all six addresses and hour sets are client-confirmed, so every café publishes `openingHoursSpecification` and `alternateName` to search engines. Café-to-photo mapping was recovered from the old site's gallery data and is confirmed rather than guessed. The phone number is confirmed as (707) 476-9393. The gift card link points at the client's own Clover ordering page (`giftCardUrl` in `src/data/site.ts`). Harris's ZIP was corrected to 95503 — Montgomery St is in Myrtletown, and the 95501 originally supplied would have published a wrong postal code.
 
 Harris carries a `locating` line — "Corner of Harris & Montgomery" — which closes the gap between the name locals use and the street it is addressed on. It was verified rather than assumed: the address geocodes to 40.7802145,-124.1385639, and an OpenStreetMap query returns Montgomery Street and Harris Street as the only named streets within 35m. The client's own storefront photo shows the Harris St Safeway behind the café, which corroborates it. The `locating` field is optional and available on any café whose common name is not its street.
