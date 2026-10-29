@@ -70,7 +70,7 @@ Recovered from the incumbent site and stored in this repo during scaffolding:
 
 - **Full menu content**, transcribed from the two menu PNGs: Hot Drinks (7 espresso drinks, 10 non-espresso, 5 extras) and Cold Drinks (6 Explosions, 4 milkshakes, TNT fruit smoothie, 8 cold beverages, 8 kids beverages), including size annotations (12oz/16oz/20oz, kids 8oz/10.5oz) and modifier notes.
 - **Verbatim brand copy**: mission statement, careers pitch, reusable-mug program, sourcing/origins paragraph.
-- **All six café addresses and hours**, client-confirmed, in `src/data/locations.ts`.
+- **All six café addresses and hours**, client-confirmed, in `src/content/cafes/`, maintained by the client through the Keystatic dashboard at `/keystatic`.
 - **Café-to-photograph mapping**, recovered from the incumbent locations page's gallery data, which paired each media id with its title and original filename. Confirmed, not inferred.
 - **Contact facts**: administrator@jitterbeancoffee.com, (707) 476-9393 (client-confirmed), office at 2905 Hubbard Ln A.
 - **Raster assets**: logo, cup photography, drink photography, location images, pulled from static.wixstatic.com.

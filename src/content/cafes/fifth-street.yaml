@@ -1,0 +1,44 @@
+name: 5th Street
+position: 4
+city: Eureka
+address: 1836 5th St.
+zip: '95501'
+photo: ../../assets/img/cafes/fifth-street/photo.png
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '17:00'
+    tuesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '17:00'
+    wednesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '17:00'
+    thursday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '17:00'
+    friday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '17:00'
+    saturday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:30'
+    sunday:
+      discriminant: true
+      value:
+        open: '07:00'
+        close: '16:00'

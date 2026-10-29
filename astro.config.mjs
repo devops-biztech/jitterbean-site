@@ -1,12 +1,15 @@
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
+import keystatic from '@keystatic/astro';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.jitterbeancoffee.com',
   // Static by default. The wholesale endpoint opts out with
-  // `export const prerender = false`, so it is the only thing that runs on a server.
+  // `export const prerender = false`; the Keystatic editor at /keystatic is
+  // the only other thing that runs on a server.
   output: 'static',
   // Canonical tags, the sitemap and the old Wix URLs all go without a slash.
   trailingSlash: 'never',
@@ -32,7 +35,11 @@ export default defineConfig({
     // The client's photography is the only imagery on the site.
     domains: [],
   },
-  integrations: [sitemap()],
+  integrations: [
+    react(),
+    keystatic(),
+    sitemap({ filter: (page) => !page.includes('/keystatic') }),
+  ],
   devToolbar: { enabled: false },
   prefetch: {
     prefetchAll: true,

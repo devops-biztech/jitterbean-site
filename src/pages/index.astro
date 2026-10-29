@@ -4,29 +4,31 @@ import HoursBoard from '../components/HoursBoard.astro';
 import Starburst from '../components/Starburst.astro';
 import Stamp from '../components/Stamp.astro';
 import { Image } from 'astro:assets';
-import { site, mission, roasts } from '../data/site';
+import { site, mission } from '../data/site';
+import { roasts } from '../data/roasts';
+import { locations } from '../data/locations';
 import { itemCount, boards } from '../data/menu';
+import { countWord } from '../lib/words';
 
-// The four names no competitor can copy. Pulled from the menu data so they
-// cannot drift out of sync with the menu page.
-const SIGNATURES = ["Jumpin' Jitter Java", 'Jet Explosion', 'Blustery Bean', 'Little Bean Shake'];
-const signatures = SIGNATURES.map((name) => {
-  for (const board of boards) {
-    for (const section of board.sections) {
-      const hit = section.items.find((i) => i.name === name);
-      if (hit) return { ...hit, board: board.name };
-    }
-  }
-  return null;
-}).filter((x): x is NonNullable<typeof x> => x !== null);
+// The names no competitor can copy: whatever the client has ticked as a
+// signature drink in the menu, in menu order.
+const signatures = boards.flatMap((board) =>
+  board.sections.flatMap((section) =>
+    section.items.filter((i) => i.signature).map((i) => ({ ...i, board: board.name })),
+  ),
+);
+const cafeCount = countWord(locations.length);
+const byDepth = [...roasts].sort((a, b) => a.depth - b.depth);
+const lightest = byDepth[0];
+const darkest = byDepth[byDepth.length - 1];
 import mascot from '../assets/img/mascot.png';
 import crew from '../assets/img/crew.jpg';
 import mugProgram from '../assets/img/mug-program.png';
 ---
 
 <Base
-  title="Jitter Bean Coffee Co. — six locations in Humboldt County"
-  description="Locally owned, locally roasted coffee with six locations across Humboldt County. See which one is open right now, and what's on the menu."
+  title={`Jitter Bean Coffee Co. — ${cafeCount} locations in Humboldt County`}
+  description={`Locally owned, locally roasted coffee with ${cafeCount} locations across Humboldt County. See which one is open right now, and what's on the menu.`}
 >
   <!-- The tin: the lockup, the descriptor, and the live count, on one band. -->
   <section class="tin halftone" aria-labelledby="wordmark">
@@ -82,8 +84,9 @@ import mugProgram from '../assets/img/mug-program.png';
       <div class="split__lead">
         <h2 id="roast-head">Roasted here, not shipped here.</h2>
         <p class="prose">
-          Four roasts, ground or whole bean, from a medium House through a
-          French dark. Bags are sold at every café — call the office or stop in,
+          {countWord(roasts.length, true)} roasts, ground or whole bean, from
+          {lightest.name} ({lightest.level.toLowerCase()}) through
+          {darkest.name} ({darkest.level.toLowerCase()}). Bags are sold at every café — call the office or stop in,
           and somebody will put one in your hand.
         </p>
         <a class="btn" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
@@ -183,7 +186,7 @@ import mugProgram from '../assets/img/mug-program.png';
         <div class="program__text">
           <h3>We're always hiring.</h3>
           <p>
-            Six locations means real shifts and real paths — barista, shift lead,
+            {countWord(locations.length, true)} locations means real shifts and real paths — barista, shift lead,
             management, support. Everyone starts at our standard entry rate,
             with increases for performance and longevity, and benefits for
             eligible employees.

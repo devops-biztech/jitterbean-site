@@ -1,12 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
 import { Image } from 'astro:assets';
-import { sourcing, roasts, site } from '../data/site';
+import { sourcing, site } from '../data/site';
+import { roasts } from '../data/roasts';
+import { countWord, listJoin } from '../lib/words';
+
+const roastCount = countWord(roasts.length);
 ---
 
 <Base
   title="Sourcing — Jitter Bean Coffee Co."
-  description="Where Jitter Bean coffee comes from, and the four roasts we pull it into: House, Sumatra, Espresso and French."
+  description={`Where Jitter Bean coffee comes from, and the ${roastCount} roasts we pull it into: ${listJoin(roasts.map((r) => r.name))}.`}
 >
   <header class="page masthead-block">
     <h1>From bean to cup.</h1>
@@ -17,7 +21,7 @@ import { sourcing, roasts, site } from '../data/site';
   </section>
 
   <section class="page section" aria-labelledby="roasts-head">
-    <h2 id="roasts-head" class="section-head">Four roasts.</h2>
+    <h2 id="roasts-head" class="section-head">{countWord(roasts.length, true)} roasts.</h2>
 
     <ol class="roasts">
       {

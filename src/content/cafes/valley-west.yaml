@@ -1,0 +1,44 @@
+name: Valley West
+position: 2
+city: Arcata
+address: '5000 Valley West Blvd. ''Pad #1'''
+zip: '95521'
+photo: ../../assets/img/cafes/valley-west/photo.jpg
+hours:
+  discriminant: true
+  value:
+    monday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    tuesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    wednesday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    thursday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    friday:
+      discriminant: true
+      value:
+        open: '06:00'
+        close: '16:30'
+    saturday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'
+    sunday:
+      discriminant: true
+      value:
+        open: '06:30'
+        close: '16:00'

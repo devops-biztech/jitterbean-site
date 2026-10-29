@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import HoursBoard from '../components/HoursBoard.astro';
 import { Image } from 'astro:assets';
 import { locations, hoursRows } from '../data/locations';
+import { countWord, listJoin } from '../lib/words';
+
+const towns = listJoin([...new Set(locations.map((l) => l.city))]);
 
 const mapsUrl = (q: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
@@ -10,12 +13,12 @@ const mapsUrl = (q: string) =>
 
 <Base
   title="Locations — Jitter Bean Coffee Co."
-  description="Six Jitter Bean locations across Humboldt County, in Arcata, Eureka and Fortuna. Addresses, hours, and which ones are open right now."
+  description={`${countWord(locations.length, true)} Jitter Bean locations across Humboldt County, in ${towns}. Addresses, hours, and which ones are open right now.`}
 >
   <header class="page masthead-block">
-    <h1>Six locations.</h1>
+    <h1>{countWord(locations.length, true)} locations.</h1>
     <p class="prose">
-      Arcata, Eureka and Fortuna. Find the one on your route, check it's open,
+      {towns}. Find the one on your route, check it's open,
       and go.
     </p>
   </header>

@@ -1,6 +1,7 @@
 ---
 import { locations, hoursRows, shortTime, DAY_ABBR, type Location } from '../data/locations';
 import { site } from '../data/site';
+import { countWord } from '../lib/words';
 import Starburst from './Starburst.astro';
 
 interface Props {
@@ -24,7 +25,7 @@ const payload = locations.map((l) => ({ slug: l.slug, hours: l.hours }));
   <div class="board__head">
     <h2 id={headingId}>Open right now</h2>
     <p class="board__note">
-      All six locations, all week. Times are Humboldt&nbsp;County local.
+      All {countWord(locations.length)} locations, all week. Times are Humboldt&nbsp;County local.
     </p>
   </div>
 
@@ -32,7 +33,7 @@ const payload = locations.map((l) => ({ slug: l.slug, hours: l.hours }));
   <div class="board__sheet" data-wide>
     <table class="grid" data-hours>
       <caption class="visually-hidden">
-        Opening hours for all six Jitter Bean Coffee Co. locations, Monday through Sunday.
+        Opening hours for all {countWord(locations.length)} Jitter Bean Coffee Co. locations, Monday through Sunday.
       </caption>
       <thead>
         <tr>

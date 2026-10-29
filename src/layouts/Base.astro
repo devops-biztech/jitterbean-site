@@ -21,12 +21,12 @@ const canonical = new URL(path, origin).href;
 const shareImage = new URL('/og.jpg', origin).href;
 
 /*
-  Structured data carries only what the client has confirmed. Hours are
-  published per café the moment `verified` flips true — until then they stay
-  out of schema.org entirely, because wrong hours in search results are worse
-  than no hours. The office is an Organization address, never a café.
+  Structured data carries only cafés with hours turned on in Keystatic — a
+  café without them stays out of schema.org entirely, because wrong hours in
+  search results are worse than no hours. The office is an Organization
+  address, never a café.
 */
-const confirmed = locations.filter((l) => l.verified && l.address && l.hours);
+const confirmed = locations.filter((l) => l.hours);
 
 const orgLd = {
   '@context': 'https://schema.org',
