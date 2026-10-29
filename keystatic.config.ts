@@ -10,7 +10,7 @@ import { config, collection, fields } from '@keystatic/core';
 */
 
 // Keystatic Cloud "team/project", from the project's settings page.
-const CLOUD_PROJECT = 'jitter-bean/website';
+const CLOUD_PROJECT = 'jitter-bean-coffee/jitterbeancoffee';
 
 /** "06:30" → "6:30 am", every quarter hour of the day. */
 const times = Array.from({ length: 96 }, (_, i) => {

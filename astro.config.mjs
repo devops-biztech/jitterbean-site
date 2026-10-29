@@ -41,6 +41,11 @@ export default defineConfig({
     sitemap({ filter: (page) => !page.includes('/keystatic') }),
   ],
   devToolbar: { enabled: false },
+  vite: {
+    // Keystatic's API route imports Astro's virtual `astro:env/server`, which
+    // Vite's dev pre-bundler cannot resolve. Leave it to Astro to load.
+    optimizeDeps: { exclude: ['@keystatic/astro'] },
+  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
